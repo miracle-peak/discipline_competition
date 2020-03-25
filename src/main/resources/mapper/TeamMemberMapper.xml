@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.subject.mapper.TeamMemberMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gxuwz.subject.model.TeamMemberModel">
+        <id column="member_no" property="memberNo" />
+        <result column="team_no" property="teamNo" />
+        <result column="student_no" property="studentNo" />
+        <result column="student_name" property="studentName" />
+        <result column="college_name" property="collegeName" />
+        <result column="class_name" property="className" />
+        <result column="grade" property="grade" />
+        <result column="major" property="major" />
+        <result column="mail" property="mail" />
+        <result column="mobile_number" property="mobileNumber" />
+    </resultMap>
+
+</mapper>

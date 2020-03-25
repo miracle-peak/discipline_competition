@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.subject.mapper.ProjectApplyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gxuwz.subject.model.ProjectApplyModel">
+        <id column="id" property="id" />
+        <result column="project_id" property="projectId" />
+        <result column="budget_id" property="budgetId" />
+        <result column="opinion" property="opinion" />
+        <result column="status" property="status" />
+    </resultMap>
+
+</mapper>

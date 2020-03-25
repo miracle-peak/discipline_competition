@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.subject.mapper.ConclusionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gxuwz.subject.model.ConclusionModel">
+        <id column="conclusion_id" property="conclusionId" />
+        <result column="prize_id" property="prizeId" />
+        <result column="capital_id" property="capitalId" />
+        <result column="team_no" property="teamNo" />
+        <result column="status" property="status" />
+        <result column="file" property="file" />
+        <result column="opinion" property="opinion" />
+    </resultMap>
+
+</mapper>

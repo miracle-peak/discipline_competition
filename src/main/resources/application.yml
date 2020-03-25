@@ -1,0 +1,54 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/competition_subject?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&tinyInt1isBit=false
+    username: ENC(GNTGqKTs2Iu5LCeKJMXiYQ==)
+    password: ENC(IBZ2wVgOEI3bT4BpDVvN9g==)
+    driver-class-name: com.mysql.jdbc.Driver
+
+  # redis配置
+  redis:
+    port: 6379
+    password:
+    database: 1
+    jedis:
+      pool:
+        max-active: 8
+        min-idle: 0
+        max-idle: 8
+        max-wait: 3000
+    timeout: 10000
+
+
+server:
+  port: 8888
+  servlet:
+    context-path: /subject
+
+
+
+jasypt:
+  encryptor:
+    # 盐
+    password: tale666cqf88miracle6TALE_CQF
+#    property:
+      # 自定义属性规则，默认前缀是“ENC(”，后缀为“)”
+
+#      prefix: "ENC["
+#      suffix: "]"
+
+
+# 监控服务
+management:
+  server:
+    port: 1688
+  endpoint:
+    shutdown:
+      enabled: true
+
+ # 监控信息
+info:
+  app:
+    name: tale_监控
+    url: https://www.jianshu.com/u/7f093d6ed255
+    email: ihopyou@qq.com
+
