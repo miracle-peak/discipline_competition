@@ -13,10 +13,10 @@ import java.util.ArrayList;
  * @Version V1.0
  * 注册过滤器
  **/
-@Configuration
+//@Configuration
 public class WebConfig {
 
-    @Bean
+//    @Bean
     public FilterRegistrationBean filterRegister(){
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
 

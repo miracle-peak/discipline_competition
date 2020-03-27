@@ -20,7 +20,7 @@ spring:
 
 
 server:
-  port: 8888
+  port: 8899
   servlet:
     context-path: /subject
 
@@ -32,7 +32,6 @@ jasypt:
     password: tale666cqf88miracle6TALE_CQF
 #    property:
       # 自定义属性规则，默认前缀是“ENC(”，后缀为“)”
-
 #      prefix: "ENC["
 #      suffix: "]"
 

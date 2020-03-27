@@ -14,7 +14,7 @@ import java.io.IOException;
  * date: 2020/3/25 13:25
  * @Version V1.0
  **/
-//@Component
+@Component
 public class MyFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -22,25 +22,26 @@ public class MyFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        System.out.println("filter---->");
+
         // 预检请求处理
-        if (req instanceof HttpServletRequest && res instanceof HttpServletResponse) {
-            HttpServletRequest request = (HttpServletRequest)req;
-            HttpServletResponse response = (HttpServletResponse) res;
-            response.setHeader("Access-Control-Allow-Origin", "*");
-            response.setHeader("Access-Control-Max-Age", "3600");
-            response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE,JSONP");
-            response.setHeader("Access-Control-Allow-Headers",
-                    "Origin, X-Requested-With, Content-Type, Accept,Authorization,X-CSRF-TOKEN");
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+        httpResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpResponse.setHeader("Access-Control-Allow-Methods", "*");
+        httpResponse.setHeader("Access-Control-Max-Age", "3600");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with");
 
-            // 是预检请求则设置响应状态并返回
-            if(request.getMethod().equals(RequestMethod.OPTIONS.name())) {
-                response.setStatus(HttpStatus.OK.value());
-                return ;
-            }
-        }
+        // 是预检请求则设置响应状态并返回
+//        if(httpRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
+//            httpResponse.setStatus(HttpStatus.OK.value());
+//            return ;
+//        }
 
-        filterChain.doFilter(req, res);
+        filterChain.doFilter(request, response);
+
+
     }
 
     @Override

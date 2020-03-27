@@ -32,6 +32,12 @@ public class ResponseUtil {
             response.setCharacterEncoding("utf-8");
             response.setContentType("text/json");
 
+            response.addHeader("Access-Control-Allow-Origin", "*");
+            response.addHeader("Access-Control-Allow-Methods", "*");
+            response.setHeader("Access-Control-Max-Age", "3600");
+            response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+            response.setHeader("Access-Control-Allow-Headers", "*");
+
             outputStream = response.getOutputStream();
             outputStream.write(result.getBytes());
 

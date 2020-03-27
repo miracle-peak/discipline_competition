@@ -1,6 +1,6 @@
 package com.gxuwz.subject.util;
 
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +22,7 @@ public class R {
     private String message;
     private Map<String, Object> data = new HashMap<>();
 
-    @ApiOperation("操作成功")
+//    @ApiOperation("操作成功")
     public static R ok(){
         R r = new R();
         r.setMessage("操作成功");
@@ -32,7 +32,7 @@ public class R {
         return r;
     }
 
-    @ApiOperation("操作失败")
+//    @ApiOperation("操作失败")
     public static R error(){
         R r = new R();
         r.setMessage("操作失败");
