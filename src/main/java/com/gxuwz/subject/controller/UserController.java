@@ -34,21 +34,10 @@ public class UserController {
     @RequestMapping("/login")
 //    @ApiOperation("登录")
     public R login(@RequestBody UserModel userModel){
-//    public R login(@RequestBody Map<String,Object> params){
-//    public R login(@RequestParam("username") String userName, @RequestParam("password") String password){
         System.out.println("login--->");
 
-//        String userName = "";
-//        String password = "";
-
-        /*if (params.containsKey("userName")){
-            userName = (String)params.get("userName");
-        }
-        if (params.containsKey("password")) {
-            password = (String) params.get("password");
-        }*/
         if (userModel == null){
-            return R.error().message("啥的没有");
+            return R.error().message("啥也没有");
         }
         String userName = userModel.getUserName();
         String password = userModel.getPassword();
@@ -77,7 +66,8 @@ public class UserController {
             boolean flag = jedistUtil.setToken(one.getId() + "", token, 60 * 60 * 24 * 6);
 
             if (flag){
-                return R.ok().message("登录成功");
+                jedistUtil.setToken(one.getId() + "", token, 7);// 存jwt到redis过期时间7天
+                return R.ok().message("登录成功").data("token", token).data("uType", one.getUtype());
             }else {
                 R.error().message("服务连接失败！").setCode(ResultCode.CONNECTION_ERROR);
             }

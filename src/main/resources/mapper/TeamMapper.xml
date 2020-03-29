@@ -6,9 +6,44 @@
     <resultMap id="BaseResultMap" type="com.gxuwz.subject.model.TeamModel">
         <id column="team_no" property="teamNo" />
         <result column="team_name" property="teamName" />
+        <result column="title" property="title" />
         <result column="project_id" property="projectId" />
         <result column="enroll_time" property="enrollTime" />
         <result column="teacher_id" property="teacherId" />
+
+        <collection property="teamMember" ofType="com.gxuwz.subject.model.TeamMemberModel">
+            <id column="member_no" property="memberNo" />
+            <result column="team_no" property="teamNo" />
+            <result column="student_no" property="studentNo" />
+            <result column="student_name" property="studentName" />
+            <result column="college_name" property="collegeName" />
+            <result column="class_name" property="className" />
+            <result column="grade" property="grade" />
+            <result column="major" property="major" />
+            <result column="mail" property="mail" />
+            <result column="mobile_number" property="mobileNumber" />
+        </collection>
+
+
     </resultMap>
+
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select sys_team.*,member_no,student_no, student_name,college_name,
+            class_name, grade, major, mail, mobile_number
+             FROM sys_team ,team_member
+            where sys_team.team_no = team_member.team_no
+            <if test="title != null and title != ''">
+                and title like "%" #{title} "%"
+            </if>
+
+            <if test="teacherId != null and teacherId != ''">
+                and teacher_id = #{teachdId}
+            </if>
+
+
+    </select>
+
+
 
 </mapper>

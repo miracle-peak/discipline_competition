@@ -19,11 +19,17 @@ spring:
     timeout: 10000
 
 
+
 server:
-  port: 8899
+  port: 8888
   servlet:
     context-path: /subject
-
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+  mapper-locations: classpath:mapper/*.xml
 
 
 jasypt:
@@ -50,4 +56,3 @@ info:
     name: tale_监控
     url: https://www.jianshu.com/u/7f093d6ed255
     email: ihopyou@qq.com
-

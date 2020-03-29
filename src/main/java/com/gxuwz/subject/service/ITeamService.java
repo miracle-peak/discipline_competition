@@ -2,6 +2,9 @@ package com.gxuwz.subject.service;
 
 import com.gxuwz.subject.model.TeamModel;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ITeamService extends IService<TeamModel> {
 
+    List<TeamModel> findAll(@Param("title")String title, @Param("teacherId")String teacherId);
 }

@@ -22,12 +22,13 @@ public class JedisUtil {
      * 存储jwt
      * @param key
      * @param value
-     * @param time
+     * @param day
      */
-    public boolean setToken(String key, Object value, int time) {
+    public boolean setToken(String key, Object value, int day) {
+        int second = day * 60 * 60 * 24;
 
         try {
-            redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(key, value, second, TimeUnit.SECONDS);
 
         }catch (Exception e){
             e.printStackTrace();

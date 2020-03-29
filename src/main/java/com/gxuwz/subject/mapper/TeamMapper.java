@@ -2,6 +2,9 @@ package com.gxuwz.subject.mapper;
 
 import com.gxuwz.subject.model.TeamModel;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface TeamMapper extends BaseMapper<TeamModel> {
 
+    List<TeamModel> findAll(@Param("title")String title, @Param("teacherId")String teacherId);
 }

@@ -35,5 +35,6 @@ public class ProjectApplyModel implements Serializable {
 
     private String status;
 
+    private ProjectModel project;
 
 }
