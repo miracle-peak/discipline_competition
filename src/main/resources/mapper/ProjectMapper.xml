@@ -19,6 +19,30 @@
         <result column="project_date" property="projectDate" />
         <result column="objective" property="objective" />
         <result column="invitation" property="invitation" />
+
+        <association property="projectApply" javaType="com.gxuwz.subject.model.ProjectApplyModel">
+            <id column="id" property="id" />
+            <result column="project_id" property="projectId" />
+            <result column="budget_id" property="budgetId" />
+            <result column="opinion" property="opinion" />
+            <result column="status" property="status" />
+        </association>
+
     </resultMap>
+
+    <select id="findByName" resultMap="BaseResultMap">
+        select sys_project.*,id, status, budget_id,opinion
+        from project_apply, sys_project
+        where project_apply.project_id = sys_project.project_id
+        <if test="name != null and name != '' ">
+            and sys_project.name like "%" #{name} "%"
+        </if>
+        <if test="teacherId != null and teacherId != '' ">
+            and sys_project.teacherId like "%" #{teacherId} "%"
+        </if>
+
+    </select>
+
+
 
 </mapper>

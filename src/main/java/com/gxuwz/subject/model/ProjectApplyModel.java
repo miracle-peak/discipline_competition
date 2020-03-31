@@ -1,9 +1,12 @@
 package com.gxuwz.subject.model;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -35,6 +38,10 @@ public class ProjectApplyModel implements Serializable {
 
     private String status;
 
+    @TableField(exist = false)
     private ProjectModel project;
+
+    @TableField(exist = false)
+    private BudgetModel budget;
 
 }

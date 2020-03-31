@@ -2,6 +2,8 @@ package com.gxuwz.subject.mapper;
 
 import com.gxuwz.subject.model.ProjectModel;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ProjectMapper extends BaseMapper<ProjectModel> {
 
+    List<ProjectModel> findByName(@Param("name")String name, @Param("teacherId")String teacherId);
 }

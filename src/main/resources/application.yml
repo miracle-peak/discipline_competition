@@ -24,13 +24,23 @@ server:
   port: 8888
   servlet:
     context-path: /subject
+
 mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
   global-config:
+    typeAliasesPackage: com.gxuwz.subject.model
     db-config:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
   mapper-locations: classpath:mapper/*.xml
 
+
+# 全局异常处理：抛出后会被GlobalExceptionHandler.class处理
+mvc:
+  #出现错误时, 直接抛出异常
+  throw-exception-if-no-handler-found: true
 
 jasypt:
   encryptor:
@@ -56,3 +66,5 @@ info:
     name: tale_监控
     url: https://www.jianshu.com/u/7f093d6ed255
     email: ihopyou@qq.com
+
+

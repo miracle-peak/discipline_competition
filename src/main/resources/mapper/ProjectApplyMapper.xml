@@ -9,6 +9,71 @@
         <result column="budget_id" property="budgetId" />
         <result column="opinion" property="opinion" />
         <result column="status" property="status" />
+
+        <association property="project" javaType="com.gxuwz.subject.model.ProjectModel">
+            <id column="project_id" property="projectId" />
+            <result column="name" property="name" />
+            <result column="organization" property="organization" />
+            <result column="format" property="format" />
+            <result column="teacher_id" property="teacherId" />
+            <result column="phone" property="phone" />
+            <result column="mail" property="mail" />
+            <result column="start_date" property="startDate" />
+            <result column="end_date" property="endDate" />
+            <result column="major" property="major" />
+            <result column="sponsor" property="sponsor" />
+            <result column="contractor" property="contractor" />
+            <result column="project_date" property="projectDate" />
+            <result column="objective" property="objective" />
+            <result column="invitation" property="invitation" />
+
+        </association>
+
+        <association property="budget" javaType="com.gxuwz.subject.model.BudgetModel">
+            <id column="budget_id" property="budgetId" />
+            <result column="enroll" property="enroll" />
+            <result column="travel" property="travel" />
+            <result column="guide" property="guide" />
+            <result column="bonus" property="bonus" />
+            <result column="consume" property="consume" />
+            <result column="other" property="other" />
+            <result column="sum" property="sum" />
+            <result column="train" property="train" />
+
+        </association>
+
     </resultMap>
+
+
+    <select id="findByName" resultMap="BaseResultMap">
+        select * from project_apply apply
+        inner join sys_project project on apply.project_id = project.project_id
+        inner join sys_budget budget on apply.budget_id = budget.budget_id
+
+    <where>
+        <if test="name != null and name != '' ">
+            and sys_project.name like "%" #{name} "%"
+        </if>
+        <if test="teacherId != null and teacherId != '' ">
+            and sys_project.teacherId like "%" #{teacherId} "%"
+        </if>
+    </where>
+
+    </select>
+
+    <!--<select id="findAll" resultMap="BaseResultMap">
+        select sys_project.*,sys_budget.*,id, status,opinion
+        from project_apply,sys_budget, sys_project
+        where project_apply.project_id = sys_project.project_id
+        and project_apply.budget_id = sys_budget.budget_id
+        <if test="name != null and name != '' ">
+            and sys_project.name like "%" #{name} "%"
+        </if>
+        <if test="teacherId != null and teacherId != '' ">
+            and sys_project.teacherId like "%" #{teacherId} "%"
+        </if>
+
+    </select>-->
+
 
 </mapper>

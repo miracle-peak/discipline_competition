@@ -8,6 +8,7 @@ import com.gxuwz.subject.model.TeamModel;
 import com.gxuwz.subject.service.ITeamService;
 import com.gxuwz.subject.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -33,35 +34,42 @@ public class TeamController {
     private ITeamService service;
 
     @RequestMapping("/list")
-    public R list(@RequestParam(value = "title", required = false) String title, @RequestParam(value = "teacherId", required = false)String teacherId,
-            @RequestParam("limit")String limit, @RequestParam("page")String page){
-
-        IPage<Map<String, Object>> list = new Page<>();
-
-        QueryWrapper<TeamModel> queryWrapper = new QueryWrapper<>();
-
-        queryWrapper.like("title", title);
-        queryWrapper.like("teacher_id", teacherId);
-        int current = 1;  // 默认第一页
-        int size = 10;    // 默认每页10
+    public R list(@RequestBody Map<String, Object> params){
+//        public R list(@RequestParam(value = "title", required = false) String title, @RequestParam(value = "teacherId", required = false)String teacherId,
+//            @RequestParam("limit")String limit, @RequestParam("page")String page){
+        String title = "";
+        String teacherId = "";
+        Integer limit = null;
+        Integer page = null;
 
 
-        if (title != null && "".equals(title)){
-            System.out.println("title--->" + title);
-            current = Integer.parseInt(title);
+        if (params.containsKey("title")){
+            title = (String)params.get("title");
         }
-        if (limit != null && "".equals(limit)){
-            size = Integer.parseInt(limit);
+        if (params.containsKey("teacherId")){
+            teacherId = (String)params.get("teacherId");
+        }
+        if (params.containsKey("limit")){
+            limit = (Integer)params.get("limit");
+        }
+        if (params.containsKey("page")){
+            page = (Integer)params.get("page");
         }
 
 
-        list = service.pageMaps(new Page<TeamModel>(current, size),queryWrapper);
+        List<TeamModel> list = service.findAll(title, teacherId);
+        int total = list.size();
 
-//        IPage<TeamModel> teamPage = new Page<>();
-//
-//        List<TeamModel> list = service.findAll(title, teacherId);
+        int offset = (page - 1) * limit;
 
-        return R.ok().data("list", list);
+        if (page * limit >= total){
+            list = list.subList(offset, total);
+        }else {
+            list = list.subList(offset, page * limit);
+        }
+
+
+        return R.ok().data("list", list).data("total", total);
 
     }
 }

@@ -2,6 +2,9 @@ package com.gxuwz.subject.service;
 
 import com.gxuwz.subject.model.ProjectApplyModel;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IProjectApplyService extends IService<ProjectApplyModel> {
 
+    List<ProjectApplyModel> findByName(@Param("name")String name, @Param("teacherId")String teacherId);
 }

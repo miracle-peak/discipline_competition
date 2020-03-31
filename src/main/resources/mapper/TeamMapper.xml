@@ -11,7 +11,7 @@
         <result column="enroll_time" property="enrollTime" />
         <result column="teacher_id" property="teacherId" />
 
-        <collection property="teamMember" ofType="com.gxuwz.subject.model.TeamMemberModel">
+        <collection property="memberList" ofType="com.gxuwz.subject.model.TeamMemberModel">
             <id column="member_no" property="memberNo" />
             <result column="team_no" property="teamNo" />
             <result column="student_no" property="studentNo" />
@@ -23,7 +23,6 @@
             <result column="mail" property="mail" />
             <result column="mobile_number" property="mobileNumber" />
         </collection>
-
 
     </resultMap>
 

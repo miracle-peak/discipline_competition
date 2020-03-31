@@ -28,15 +28,8 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
 
-//        StringBuffer url = request.getRequestURL();
-//        System.out.println("url--->" + url);
-
-        System.out.println("interceptor--->" + uri);
-
         if (! uri.contains("/user/login")){// 不拦截登录请求
             String jwt = request.getHeader("Authorization");
-
-            System.out.println("jwt--->" + jwt);
 
             Map<String, Object> resp = new HashMap<>();
 
@@ -47,7 +40,6 @@ public class JwtInterceptor implements HandlerInterceptor {
                 if (claims.containsKey("id")){
 
                     String id = claims.get("id").toString();
-                    System.out.println("id-->" + id);
 
                     String token = jedisUtil.getToken(id);
                     if (! jwt.equals(token)){// jwt不一致
@@ -76,9 +68,6 @@ public class JwtInterceptor implements HandlerInterceptor {
                 return false;
             }
         }
-
-
-        System.out.println("true--->");
 
         return true;
     }

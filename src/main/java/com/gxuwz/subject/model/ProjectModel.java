@@ -56,5 +56,7 @@ public class ProjectModel implements Serializable {
 
     private String invitation;
 
+    private ProjectApplyModel projectApply;
+
 
 }

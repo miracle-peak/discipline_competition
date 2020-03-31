@@ -75,7 +75,15 @@ public class R {
         return this;
     }
 
+    public R() {
+    }
 
+    // 全局异常使用
+    public R(int code, String msg){
+        this.setCode(code);
+
+        this.setMessage(msg);
+    }
 
 
 }
