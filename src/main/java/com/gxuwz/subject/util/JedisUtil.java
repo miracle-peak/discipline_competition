@@ -55,4 +55,20 @@ public class JedisUtil {
         }
 
     }
+
+    /**
+     * get
+     * @param key
+     * @return
+     */
+    public String getStr(String key){
+        try {
+            String result = (String)redisTemplate.opsForValue().get(key);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+    }
 }

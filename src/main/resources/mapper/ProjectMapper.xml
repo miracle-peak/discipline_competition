@@ -38,7 +38,7 @@
             and sys_project.name like "%" #{name} "%"
         </if>
         <if test="teacherId != null and teacherId != '' ">
-            and sys_project.teacherId like "%" #{teacherId} "%"
+            and sys_project.teacher_id like "%" #{teacherId} "%"
         </if>
 
     </select>

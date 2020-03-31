@@ -39,7 +39,7 @@ public class TeamModel implements Serializable {
     private String teacherId;
 
     @TableLogic
-    private Integer delete_flag;
+    private Integer deleteFlag;
 
     @TableField(exist = false)
     private List<TeamMemberModel> memberList;

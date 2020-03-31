@@ -36,16 +36,24 @@ public class ProjectApplyController {
     public R list(@RequestParam("status")String status, @RequestParam("name")String name,
                   @RequestParam("limit")Integer limit, @RequestParam("page")Integer page,
                   @RequestParam("teacherId")String teacherId){
-        System.out.println("status---->" + status + "name--->" + name);
+        System.out.println("status---->" + status + "teacherId--->" + teacherId);
 
-//        List<ProjectApplyModel> list = service.list();
         List<ProjectApplyModel> list = service.findByName(name, teacherId);
 
+        int total = list.size();
 
-        return R.ok().data("list", list);
+        int offset = (page - 1) * limit;
+
+        if (page * limit >= total){
+            list = list.subList(offset, total);
+        }else {
+            list = list.subList(offset, page * limit);
+        }
+
+        return R.ok().data("list", list).data("total", total);
     }
 
-    @PostMapping("/saveOrUpdate")
+    @PostMapping("/save")
     public R add(@RequestBody ProjectApplyModel projectApplyModel){
         boolean flag = true;
 
@@ -61,14 +69,8 @@ public class ProjectApplyController {
         }
         Integer projectId = projectApplyModel.getProject().getProjectId();
 
-        System.out.println(budgetId + "budgetId---> projectId--->" + projectId);
-
         projectApplyModel.setBudgetId(budgetId);
         projectApplyModel.setProjectId(projectId);
-
-//        projectApplyModel.getBudget().setBudgetId(budgetId);
-//        projectApplyModel.getProject().setProjectId(projectId);
-
 
         flag = service.save(projectApplyModel);
         if (flag){
@@ -76,6 +78,34 @@ public class ProjectApplyController {
         }else {
             return R.error();
         }
+
+    }
+
+
+    @PostMapping("/update")
+    public R update(@RequestBody ProjectApplyModel projectApplyModel){
+        boolean flag = true;
+
+        flag = service.updateById(projectApplyModel);
+
+        flag = projectService.updateById(projectApplyModel.getProject());
+        if (! flag){
+            return R.error();
+        }
+
+        flag = budgetService.updateById(projectApplyModel.getBudget());
+        if (! flag){
+            return R.error();
+        }
+
+
+        System.out.println("sum-->" + projectApplyModel.getBudget().getSum());
+        if (flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
+
 
     }
 

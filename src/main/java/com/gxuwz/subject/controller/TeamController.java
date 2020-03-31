@@ -56,6 +56,7 @@ public class TeamController {
             page = (Integer)params.get("page");
         }
 
+        System.out.println("team---teacherId--->" + teacherId);
 
         List<TeamModel> list = service.findAll(title, teacherId);
         int total = list.size();

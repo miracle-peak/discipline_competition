@@ -28,16 +28,19 @@
 
 
     <select id="findAll" resultMap="BaseResultMap">
-        select sys_team.*,member_no,student_no, student_name,college_name,
+        /*select sys_team.*,member_no,student_no, student_name,college_name,
             class_name, grade, major, mail, mobile_number
              FROM sys_team ,team_member
-            where sys_team.team_no = team_member.team_no
+            where sys_team.team_no = team_member.team_no and sys_team.delete_flag = 0*/
+        select * FROM sys_team team
+        left join team_member member on team.team_no = member.team_no
+        where team.delete_flag = 0
             <if test="title != null and title != ''">
                 and title like "%" #{title} "%"
             </if>
 
             <if test="teacherId != null and teacherId != ''">
-                and teacher_id = #{teachdId}
+                and teacher_id = #{teacherId}
             </if>
 
 

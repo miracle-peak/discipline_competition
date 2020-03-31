@@ -1,7 +1,9 @@
 package com.gxuwz.subject.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.gxuwz.subject.model.TeacherModel;
 import com.gxuwz.subject.model.UserModel;
+import com.gxuwz.subject.service.ITeacherService;
 import com.gxuwz.subject.service.IUserService;
 import com.gxuwz.subject.util.*;
 //import io.swagger.annotations.ApiOperation;
@@ -27,6 +29,8 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+    @Autowired
+    private ITeacherService teacherService;
 
     @Autowired
     private JedisUtil jedistUtil;
@@ -61,12 +65,26 @@ public class UserController {
 
         UserModel one = userService.getOne(wrapper);
         if (one != null){
-            String token = JWTUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype());
+            String token = "";
+            boolean flag = true;
+            token = jedistUtil.getStr(one.getId() + "");
+            System.out.println("getStr---->" + token);
+            if (token == null || "".equals(token)) {
+                token = JWTUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype());
 
-            boolean flag = jedistUtil.setToken(one.getId() + "", token, 60 * 60 * 24 * 6);
+                flag = jedistUtil.setToken(one.getId() + "", token, 7); // 存jwt到redis过期时间7天
+            }
 
             if (flag){
-                jedistUtil.setToken(one.getId() + "", token, 7);// 存jwt到redis过期时间7天
+                // 如果是教师则返回教师工号
+                if (one.getUtype().equals("3")){
+                    QueryWrapper queryWrapper = new QueryWrapper();
+                    queryWrapper.eq("account_num", one.getUserName());
+                    TeacherModel teacherModel = teacherService.getOne(queryWrapper);
+
+                    return R.ok().data("token", token).data("uType", one.getUtype()).data("teacherId", teacherModel.getTeacherId());
+                }
+
                 return R.ok().message("登录成功").data("token", token).data("uType", one.getUtype());
             }else {
                 R.error().message("服务连接失败！").setCode(ResultCode.CONNECTION_ERROR);
