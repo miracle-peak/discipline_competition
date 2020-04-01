@@ -1,20 +1,15 @@
 package com.gxuwz.subject.controller;
-
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gxuwz.subject.common.util.R;
+import com.gxuwz.subject.model.TeamMemberModel;
 import com.gxuwz.subject.model.TeamModel;
+import com.gxuwz.subject.service.ITeamMemberService;
 import com.gxuwz.subject.service.ITeamService;
-import com.gxuwz.subject.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +27,8 @@ public class TeamController {
 
     @Autowired
     private ITeamService service;
+    @Autowired
+    private ITeamMemberService memberService;
 
     @RequestMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
@@ -73,4 +70,90 @@ public class TeamController {
         return R.ok().data("list", list).data("total", total);
 
     }
+
+    @PostMapping("/add")
+    public R add(@RequestBody TeamModel teamModel){
+        System.out.println("saveOrUpdate--->" + teamModel);
+
+        // 生成团队编号
+        long currentTimeMillis = System.currentTimeMillis();
+        teamModel.setTeamNo(currentTimeMillis + "");
+        List<TeamMemberModel> memberList = teamModel.getMemberList();
+        for (TeamMemberModel member:memberList
+             ) {
+            member.setTeamNo(currentTimeMillis + "");
+        }
+        teamModel.setMemberList(memberList);
+
+        boolean flag = memberService.saveBatch(memberList);
+
+
+        System.out.println("team----->" + teamModel);
+        if (! flag){
+            return R.error();
+        }
+        flag = service.save(teamModel);
+        if (flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
+
+    }
+
+    @PostMapping("/update")
+    public R update(@RequestBody TeamModel teamModel){
+        boolean flag = memberService.updateBatchById(teamModel.getMemberList());
+
+        if (! flag){
+            return R.error();
+        }
+
+        flag = service.updateById(teamModel);
+        if (flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
+
+    }
+
+    /**
+     * 删删除团队信息
+     * @param teamNos
+     * @return
+     */
+    @PostMapping("/batchRemove")
+    public R batchRemove(@RequestBody String[] teamNos){
+        System.out.println("batchRemove--->" + teamNos);
+
+        boolean flag = service.removeByIds(Arrays.asList(teamNos));
+
+        if (! flag){
+            return R.error();
+        }
+        QueryWrapper<TeamMemberModel> queryWrapper = new QueryWrapper();
+
+        List<Integer> memberNos = new ArrayList<>();
+        for (String id: teamNos
+             ) {
+            queryWrapper.eq("team_no", id);
+
+            List<TeamMemberModel> memberList = memberService.list(queryWrapper);
+            for (TeamMemberModel member: memberList
+                 ) {
+                memberNos.add(member.getMemberNo());
+            }
+        }
+        System.out.println("memberNos---->" + memberNos);
+
+        flag = memberService.removeByIds(memberNos);
+        if (flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
+
+    }
+
 }

@@ -1,9 +1,8 @@
-package com.gxuwz.subject.config;
+package com.gxuwz.subject.common.config;
 
-import com.gxuwz.subject.interceptor.JwtInterceptor;
+import com.gxuwz.subject.common.interceptor.JwtInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 

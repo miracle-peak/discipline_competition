@@ -1,14 +1,13 @@
-package com.gxuwz.subject.aop;
+package com.gxuwz.subject.common.aop;
 
-import com.gxuwz.subject.util.R;
-import com.gxuwz.subject.util.ResultCode;
+import com.gxuwz.subject.common.util.R;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.gxuwz.subject.common.util.ResultCode;
 
 /**
  * 用于未被全局异常处理的错误 如：404

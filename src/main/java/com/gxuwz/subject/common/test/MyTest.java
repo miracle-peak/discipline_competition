@@ -1,6 +1,6 @@
-package com.gxuwz.subject.test;
+package com.gxuwz.subject.common.test;
 
-import com.gxuwz.subject.util.MD5Util;
+import com.gxuwz.subject.common.util.MD5Util;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.junit.Test;
 

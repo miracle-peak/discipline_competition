@@ -5,14 +5,10 @@ import com.gxuwz.subject.model.TeacherModel;
 import com.gxuwz.subject.model.UserModel;
 import com.gxuwz.subject.service.ITeacherService;
 import com.gxuwz.subject.service.IUserService;
-import com.gxuwz.subject.util.*;
+import com.gxuwz.subject.common.util.*;
 //import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Controller;
-
-import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * <p>

@@ -1,10 +1,8 @@
-package com.gxuwz.subject.util;
+package com.gxuwz.subject.common.util;
 
 //import io.swagger.annotations.ApiOperation;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.HashMap;
 import java.util.Map;
 

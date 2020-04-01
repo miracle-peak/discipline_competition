@@ -32,8 +32,9 @@
             class_name, grade, major, mail, mobile_number
              FROM sys_team ,team_member
             where sys_team.team_no = team_member.team_no and sys_team.delete_flag = 0*/
+
         select * FROM sys_team team
-        left join team_member member on team.team_no = member.team_no
+        inner join team_member member on team.team_no = member.team_no
         where team.delete_flag = 0
             <if test="title != null and title != ''">
                 and title like "%" #{title} "%"

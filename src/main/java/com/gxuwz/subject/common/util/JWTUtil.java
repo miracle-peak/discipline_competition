@@ -1,4 +1,4 @@
-package com.gxuwz.subject.util;
+package com.gxuwz.subject.common.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

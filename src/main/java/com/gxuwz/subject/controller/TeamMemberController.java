@@ -1,9 +1,11 @@
 package com.gxuwz.subject.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.stereotype.Controller;
+import com.gxuwz.subject.model.TeamMemberModel;
+import com.gxuwz.subject.service.ITeamMemberService;
+import com.gxuwz.subject.common.util.R;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -13,8 +15,24 @@ import org.springframework.stereotype.Controller;
  * @author tale
  * @since 2020-03-25
  */
-@Controller
-@RequestMapping("/team-member")
+@RestController
+@RequestMapping("/teamMember")
 public class TeamMemberController {
+
+    @Autowired
+    private ITeamMemberService service;
+
+    @PostMapping("/delete")
+    public R delete(@RequestBody TeamMemberModel teamMemberModel){
+        System.out.println("delete--->" + teamMemberModel);
+
+        boolean flag = service.removeById(teamMemberModel);
+        if (flag){
+            return R.ok();
+        }
+
+        return R.error();
+    }
+
 
 }

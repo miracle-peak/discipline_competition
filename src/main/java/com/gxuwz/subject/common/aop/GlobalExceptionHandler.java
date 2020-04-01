@@ -1,7 +1,7 @@
-package com.gxuwz.subject.aop;
+package com.gxuwz.subject.common.aop;
 
-import com.gxuwz.subject.util.R;
-import com.gxuwz.subject.util.ResultCode;
+import com.gxuwz.subject.common.util.R;
+import com.gxuwz.subject.common.util.ResultCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;

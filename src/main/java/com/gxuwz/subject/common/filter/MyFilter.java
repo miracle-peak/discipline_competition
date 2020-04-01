@@ -1,8 +1,6 @@
-package com.gxuwz.subject.filter;
+package com.gxuwz.subject.common.filter;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

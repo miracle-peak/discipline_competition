@@ -1,10 +1,10 @@
-package com.gxuwz.subject.interceptor;
+package com.gxuwz.subject.common.interceptor;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.gxuwz.subject.util.JWTUtil;
-import com.gxuwz.subject.util.JedisUtil;
-import com.gxuwz.subject.util.ResponseUtil;
-import com.gxuwz.subject.util.ResultCode;
+import com.gxuwz.subject.common.util.JWTUtil;
+import com.gxuwz.subject.common.util.JedisUtil;
+import com.gxuwz.subject.common.util.ResponseUtil;
+import com.gxuwz.subject.common.util.ResultCode;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
