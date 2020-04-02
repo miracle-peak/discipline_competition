@@ -1,9 +1,9 @@
 package com.gxuwz.subject.controller;
 
-
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.stereotype.Controller;
+import com.gxuwz.subject.common.util.R;
+import com.gxuwz.subject.service.IConclusionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -13,8 +13,18 @@ import org.springframework.stereotype.Controller;
  * @author tale
  * @since 2020-03-25
  */
-@Controller
+@RestController
 @RequestMapping("/conclusion")
 public class ConclusionController {
+
+    @Autowired
+    private IConclusionService service;
+
+    @GetMapping("/list")
+    public R list(@RequestParam("name")String name,  @RequestParam("limit")Integer limit,
+                  @RequestParam("page")Integer page){
+
+        return R.ok();
+    }
 
 }

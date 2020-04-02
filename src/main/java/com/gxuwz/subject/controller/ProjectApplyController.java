@@ -5,8 +5,13 @@ import com.gxuwz.subject.service.IBudgetService;
 import com.gxuwz.subject.service.IProjectApplyService;
 import com.gxuwz.subject.service.IProjectService;
 import com.gxuwz.subject.common.util.R;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,6 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/projectApply")
 public class ProjectApplyController {
+    Logger logger = LoggerFactory.getLogger(ProjectApplyController.class);
 
     @Autowired
     private IProjectApplyService service;
@@ -33,9 +39,9 @@ public class ProjectApplyController {
     public R list(@RequestParam("status")String status, @RequestParam("name")String name,
                   @RequestParam("limit")Integer limit, @RequestParam("page")Integer page,
                   @RequestParam("teacherId")String teacherId){
-        System.out.println("status---->" + status + "teacherId--->" + teacherId);
+        logger.info("status---->" + status);
 
-        List<ProjectApplyModel> list = service.findByName(name, teacherId);
+        List<ProjectApplyModel> list = service.findByName(name, teacherId, status);
 
         int total = list.size();
 
@@ -82,8 +88,10 @@ public class ProjectApplyController {
     @PostMapping("/update")
     public R update(@RequestBody ProjectApplyModel projectApplyModel){
         boolean flag = true;
+        logger.info("-->" + projectApplyModel);
 
         flag = service.updateById(projectApplyModel);
+        logger.info("teacherId-->" + projectApplyModel.getProject().getTeacherId());
 
         flag = projectService.updateById(projectApplyModel.getProject());
         if (! flag){
@@ -91,19 +99,54 @@ public class ProjectApplyController {
         }
 
         flag = budgetService.updateById(projectApplyModel.getBudget());
-        if (! flag){
-            return R.error();
-        }
-
-
-        System.out.println("sum-->" + projectApplyModel.getBudget().getSum());
         if (flag){
             return R.ok();
         }else {
             return R.error();
         }
 
+    }
 
+    @PostMapping("/commit")
+    public R commit(@RequestBody ProjectApplyModel projectApplyModel){
+        logger.info("-->" + projectApplyModel);
+
+        boolean flag = service.updateById(projectApplyModel);
+
+        if (flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
+    }
+
+    @GetMapping("/delete/{id}")
+    public R delete(@PathVariable("id") Integer id){
+
+        boolean flag = service.removeById(id);
+
+        if (flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
+    }
+
+    @PostMapping("/batchRemove")
+    public R batchRemove(@RequestBody Integer[] ids){
+//        List<Integer> idList = new ArrayList<>();
+//        for (String id:ids
+//             ) {
+//            idList.add(Integer.parseInt(id));
+//        }
+
+        boolean flag = service.removeByIds(Arrays.asList(ids));
+
+        if (flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
     }
 
 }

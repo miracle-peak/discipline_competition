@@ -24,7 +24,7 @@ public class ProjectApplyServiceImpl extends ServiceImpl<ProjectApplyMapper, Pro
     private ProjectApplyMapper mapper;
 
     @Override
-    public List<ProjectApplyModel> findByName(String name, String teacherId) {
-        return mapper.findByName(name, teacherId);
+    public List<ProjectApplyModel> findByName(String name, String teacherId, String status) {
+        return mapper.findByName(name, teacherId, status);
     }
 }

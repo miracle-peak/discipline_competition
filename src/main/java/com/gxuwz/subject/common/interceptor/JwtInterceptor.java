@@ -28,8 +28,10 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
 
-        if (! uri.contains("/user/login")){// 不拦截登录请求
+        if (! uri.contains("/user/login") && ! uri.contains("/file")){ // 不拦截登录请求
             String jwt = request.getHeader("Authorization");
+
+            System.out.println("------------>");
 
             Map<String, Object> resp = new HashMap<>();
 

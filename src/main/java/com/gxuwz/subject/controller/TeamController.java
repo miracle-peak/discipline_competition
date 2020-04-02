@@ -5,6 +5,8 @@ import com.gxuwz.subject.model.TeamMemberModel;
 import com.gxuwz.subject.model.TeamModel;
 import com.gxuwz.subject.service.ITeamMemberService;
 import com.gxuwz.subject.service.ITeamService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/team")
 public class TeamController {
+    Logger logger = LoggerFactory.getLogger(TeamController.class);
 
     @Autowired
     private ITeamService service;
@@ -53,7 +56,7 @@ public class TeamController {
             page = (Integer)params.get("page");
         }
 
-        System.out.println("team---teacherId--->" + teacherId);
+        logger.info("team---teacherId--->" + teacherId);
 
         List<TeamModel> list = service.findAll(title, teacherId);
         int total = list.size();
@@ -66,9 +69,7 @@ public class TeamController {
             list = list.subList(offset, page * limit);
         }
 
-
         return R.ok().data("list", list).data("total", total);
-
     }
 
     @PostMapping("/add")
@@ -87,8 +88,6 @@ public class TeamController {
 
         boolean flag = memberService.saveBatch(memberList);
 
-
-        System.out.println("team----->" + teamModel);
         if (! flag){
             return R.error();
         }
@@ -125,13 +124,16 @@ public class TeamController {
      */
     @PostMapping("/batchRemove")
     public R batchRemove(@RequestBody String[] teamNos){
-        System.out.println("batchRemove--->" + teamNos);
+        logger.info("batchRemove--->" + teamNos);
 
         boolean flag = service.removeByIds(Arrays.asList(teamNos));
 
         if (! flag){
             return R.error();
         }
+
+        // 也可以不删除成员信息
+        // 一下是删除批量成员
         QueryWrapper<TeamMemberModel> queryWrapper = new QueryWrapper();
 
         List<Integer> memberNos = new ArrayList<>();
@@ -145,7 +147,7 @@ public class TeamController {
                 memberNos.add(member.getMemberNo());
             }
         }
-        System.out.println("memberNos---->" + memberNos);
+        logger.info("memberNos---->" + memberNos);
 
         flag = memberService.removeByIds(memberNos);
         if (flag){

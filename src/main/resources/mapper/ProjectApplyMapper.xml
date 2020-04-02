@@ -57,6 +57,9 @@
         <if test="teacherId != null and teacherId != '' ">
             and project.teacher_id like "%" #{teacherId} "%"
         </if>
+        <if test="status != null and status != '' ">
+            and apply.status = #{status}
+        </if>
 
     </select>
 
