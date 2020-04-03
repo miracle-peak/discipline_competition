@@ -24,7 +24,8 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, TeamModel> implemen
     private TeamMapper teamMapper;
 
     @Override
-    public List<TeamModel> findAll(String title, String teacherId) {
-        return teamMapper.findAll(title, teacherId);
+    public List<TeamModel> findAll(String title, String teacherId, Integer current,
+                                   Integer limit) {
+        return teamMapper.findAll(title, teacherId, current, limit);
     }
 }

@@ -3,7 +3,6 @@ package com.gxuwz.subject.common.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;

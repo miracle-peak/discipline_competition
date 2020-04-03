@@ -16,5 +16,5 @@ import java.util.List;
  */
 public interface IProjectApplyService extends IService<ProjectApplyModel> {
 
-    List<ProjectApplyModel> findByName(String name, String teacherId, String status);
+    List<ProjectApplyModel> findByName(String name, String teacherId, String status, Integer current, Integer limit);
 }

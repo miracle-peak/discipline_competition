@@ -61,6 +61,12 @@
             and apply.status = #{status}
         </if>
 
+        <if test="current != null and current != ''">
+            <if test="limit != null and limit != ''">
+                limit #{current}, #{limit}
+            </if>
+        </if>
+
     </select>
 
     <!--<select id="findAll" resultMap="BaseResultMap">

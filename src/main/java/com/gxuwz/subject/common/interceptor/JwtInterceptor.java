@@ -44,6 +44,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                     String id = claims.get("id").toString();
 
                     String token = jedisUtil.getToken(id);
+                    System.out.println("token--->" + token);
                     if (! jwt.equals(token)){// jwt不一致
                         resp.put("message", "对不起！您的token 有误！token error");
                         resp.put("code", ResultCode.TOKEN_ERROR);
@@ -58,6 +59,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                     resp.put("message", "对不起！您的token 有误！token error");
                     resp.put("code", ResultCode.TOKEN_ERROR);
 
+                    ResponseUtil.returnJson(response, resp);
                     return false;
                 }
 

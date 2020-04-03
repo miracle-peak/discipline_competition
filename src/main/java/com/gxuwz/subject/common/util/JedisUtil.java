@@ -1,8 +1,9 @@
 package com.gxuwz.subject.common.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
  **/
 @Component
 public class JedisUtil {
+    Logger logger = LoggerFactory.getLogger(JedisUtil.class);
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -63,12 +65,36 @@ public class JedisUtil {
      */
     public String getStr(String key){
         try {
-            String result = (String)redisTemplate.opsForValue().get(key);
-            return result;
+            Object value = redisTemplate.opsForValue().get(key);
+            logger.info("value--->" + value.toString() + "==");
+            if (value != null && ! "".equals(value)){
+                logger.info("null----");
+                return (String) value;
+            }
+            logger.info("not null----");
+
+            return "";
         }catch (Exception e){
             e.printStackTrace();
-            return null;
+            return "";
         }
 
+    }
+
+    /**
+     *
+     * @param key
+     * @param value
+     * @param expireTime 过期时间单位秒
+     * @return
+     */
+    public boolean setStr(String key, String value, int expireTime){
+        try {
+            redisTemplate.opsForValue().set(key, value, expireTime, TimeUnit.SECONDS);
+
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 }

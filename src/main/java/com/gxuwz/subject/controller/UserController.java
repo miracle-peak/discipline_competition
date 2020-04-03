@@ -31,8 +31,9 @@ public class UserController {
     @Autowired
     private JedisUtil jedistUtil;
 
-    @RequestMapping("/login")
 //    @ApiOperation("登录")
+    @RequestMapping("/login")
+    @VisitLimit(limit = 3, rangeTime = 5, expire = 60)
     public R login(@RequestBody UserModel userModel){
         System.out.println("login--->");
 

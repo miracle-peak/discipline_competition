@@ -1,6 +1,7 @@
 package com.gxuwz.subject.common.config;
 
 import com.gxuwz.subject.common.interceptor.JwtInterceptor;
+import com.gxuwz.subject.common.interceptor.VisitLimitInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -20,6 +21,11 @@ public class MyConfigurer implements WebMvcConfigurer {
         return new JwtInterceptor();
     }
 
+    @Bean
+    public VisitLimitInterceptor getVisitList(){
+        return new VisitLimitInterceptor();
+    }
+
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -28,5 +34,7 @@ public class MyConfigurer implements WebMvcConfigurer {
 //                .excludePathPatterns("/file")
         .addPathPatterns("/**");
 
+        registry.addInterceptor(getVisitList())
+                .addPathPatterns("/**");
     }
 }

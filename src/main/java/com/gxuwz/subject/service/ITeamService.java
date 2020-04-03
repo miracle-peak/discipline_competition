@@ -16,5 +16,6 @@ import java.util.List;
  */
 public interface ITeamService extends IService<TeamModel> {
 
-    List<TeamModel> findAll(@Param("title")String title, @Param("teacherId")String teacherId);
+    List<TeamModel> findAll(String title, String teacherId,
+                            Integer current, Integer limit);
 }

@@ -1,6 +1,9 @@
 package com.gxuwz.subject.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gxuwz.subject.common.util.R;
+import com.gxuwz.subject.common.util.VisitLimit;
 import com.gxuwz.subject.model.TeamMemberModel;
 import com.gxuwz.subject.model.TeamModel;
 import com.gxuwz.subject.service.ITeamMemberService;
@@ -19,7 +22,7 @@ import java.util.Map;
  * <p>
  *  前端控制器
  * </p>
- *
+ * 团队信息
  * @author tale
  * @since 2020-03-25
  */
@@ -39,8 +42,8 @@ public class TeamController {
 //            @RequestParam("limit")String limit, @RequestParam("page")String page){
         String title = "";
         String teacherId = "";
-        Integer limit = null;
-        Integer page = null;
+        Integer limit = 10;
+        Integer page = 1;
 
 
         if (params.containsKey("title")){
@@ -58,21 +61,28 @@ public class TeamController {
 
         logger.info("team---teacherId--->" + teacherId);
 
-        List<TeamModel> list = service.findAll(title, teacherId);
-        int total = list.size();
+//        IPage myPage = new Page((page - 1) * limit, limit);
+//        QueryWrapper queryWrapper = new QueryWrapper();
+//        queryWrapper.eq("teacher_id", teacherId);
+//        IPage pageInfo = service.page(myPage, queryWrapper);
 
         int offset = (page - 1) * limit;
 
-        if (page * limit >= total){
-            list = list.subList(offset, total);
-        }else {
-            list = list.subList(offset, page * limit);
-        }
+        List<TeamModel> list = service.findAll(title, teacherId, offset, limit);
+        int total = list.size();
+
+
+//        if (page * limit >= total){
+//            list = list.subList(offset, total);
+//        }else {
+//            list = list.subList(offset, page * limit);
+//        }
 
         return R.ok().data("list", list).data("total", total);
     }
 
     @PostMapping("/add")
+    @VisitLimit(limit = 3, rangeTime = 3, expire = 30)
     public R add(@RequestBody TeamModel teamModel){
         System.out.println("saveOrUpdate--->" + teamModel);
 
@@ -118,7 +128,7 @@ public class TeamController {
     }
 
     /**
-     * 删删除团队信息
+     * 删删除团队信息包括成员信息
      * @param teamNos
      * @return
      */

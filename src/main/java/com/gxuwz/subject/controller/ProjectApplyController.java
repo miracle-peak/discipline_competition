@@ -1,5 +1,8 @@
 package com.gxuwz.subject.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gxuwz.subject.model.ProjectApplyModel;
 import com.gxuwz.subject.service.IBudgetService;
 import com.gxuwz.subject.service.IProjectApplyService;
@@ -18,7 +21,7 @@ import java.util.List;
  * <p>
  *  前端控制器
  * </p>
- *
+ * 项目立项
  * @author tale
  * @since 2020-03-25
  */
@@ -39,19 +42,19 @@ public class ProjectApplyController {
     public R list(@RequestParam("status")String status, @RequestParam("name")String name,
                   @RequestParam("limit")Integer limit, @RequestParam("page")Integer page,
                   @RequestParam("teacherId")String teacherId){
-        logger.info("status---->" + status);
+        logger.info("limit---->" + limit);
+        int offset = (page - 1) * limit;
 
-        List<ProjectApplyModel> list = service.findByName(name, teacherId, status);
+        List<ProjectApplyModel> list = service.findByName(name, teacherId, status, offset, limit);
 
         int total = list.size();
 
-        int offset = (page - 1) * limit;
 
-        if (page * limit >= total){
-            list = list.subList(offset, total);
-        }else {
-            list = list.subList(offset, page * limit);
-        }
+//        if (page * limit >= total){
+//            list = list.subList(offset, total);
+//        }else {
+//            list = list.subList(offset, page * limit);
+//        }
 
         return R.ok().data("list", list).data("total", total);
     }
@@ -107,6 +110,11 @@ public class ProjectApplyController {
 
     }
 
+    /**
+     * 项目申请提交
+     * @param projectApplyModel
+     * @return
+     */
     @PostMapping("/commit")
     public R commit(@RequestBody ProjectApplyModel projectApplyModel){
         logger.info("-->" + projectApplyModel);

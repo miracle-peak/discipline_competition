@@ -1,4 +1,4 @@
-package com.gxuwz.subject.common.aop;
+package com.gxuwz.subject.common.exception;
 
 import com.gxuwz.subject.common.util.R;
 import org.springframework.boot.web.servlet.error.ErrorController;

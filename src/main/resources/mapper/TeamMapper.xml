@@ -39,10 +39,15 @@
             <if test="title != null and title != ''">
                 and title like "%" #{title} "%"
             </if>
-
             <if test="teacherId != null and teacherId != ''">
                 and teacher_id = #{teacherId}
             </if>
+            <if test="current != null and current != ''">
+                <if test="limit != null and limit != ''">
+                    limit #{current}, #{limit}
+                </if>
+            </if>
+
 
 
     </select>
