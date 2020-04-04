@@ -66,13 +66,9 @@ public class JedisUtil {
     public String getStr(String key){
         try {
             Object value = redisTemplate.opsForValue().get(key);
-            logger.info("value--->" + value.toString() + "==");
             if (value != null && ! "".equals(value)){
-                logger.info("null----");
                 return (String) value;
             }
-            logger.info("not null----");
-
             return "";
         }catch (Exception e){
             e.printStackTrace();

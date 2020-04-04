@@ -20,4 +20,7 @@ public interface ProjectApplyMapper extends BaseMapper<ProjectApplyModel> {
     List<ProjectApplyModel> findByName(@Param("name")String name,
           @Param("teacherId")String teacherId, @Param("status")String status,
           @Param("current")Integer current, @Param("limit")Integer limit);
+
+    Integer getTotal(@Param("name")String name, @Param("teacherId")String teacherId,
+                     @Param("status")String status);
 }

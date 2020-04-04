@@ -28,4 +28,9 @@ public class ProjectApplyServiceImpl extends ServiceImpl<ProjectApplyMapper, Pro
         String status, Integer current, Integer limit) {
         return mapper.findByName(name, teacherId, status, current, limit);
     }
+
+    @Override
+    public Integer getTotal(String name, String teacherId, String status) {
+        return mapper.getTotal(name, teacherId, status);
+    }
 }

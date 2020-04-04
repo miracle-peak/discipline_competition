@@ -2,8 +2,6 @@ package com.gxuwz.subject.service;
 
 import com.gxuwz.subject.model.ProjectApplyModel;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
@@ -17,4 +15,7 @@ import java.util.List;
 public interface IProjectApplyService extends IService<ProjectApplyModel> {
 
     List<ProjectApplyModel> findByName(String name, String teacherId, String status, Integer current, Integer limit);
+
+    // 获取总记录数
+    Integer getTotal(String name, String teacherId, String status);
 }

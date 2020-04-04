@@ -28,4 +28,9 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, TeamModel> implemen
                                    Integer limit) {
         return teamMapper.findAll(title, teacherId, current, limit);
     }
+
+    @Override
+    public Integer getTotal(String title, String teacherId) {
+        return teamMapper.getTotal(title, teacherId);
+    }
 }

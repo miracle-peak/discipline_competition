@@ -69,14 +69,8 @@ public class TeamController {
         int offset = (page - 1) * limit;
 
         List<TeamModel> list = service.findAll(title, teacherId, offset, limit);
-        int total = list.size();
 
-
-//        if (page * limit >= total){
-//            list = list.subList(offset, total);
-//        }else {
-//            list = list.subList(offset, page * limit);
-//        }
+        Integer total = service.getTotal(title, teacherId);
 
         return R.ok().data("list", list).data("total", total);
     }

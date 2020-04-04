@@ -9,8 +9,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 访问限制拦截器
@@ -32,7 +30,6 @@ public class VisitLimitInterceptor implements HandlerInterceptor {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();
 
-
             // 判断该方法是否含有限制访问注解@VisitLimit
             if (! method.isAnnotationPresent(VisitLimit.class)){
                 return true;
@@ -48,9 +45,8 @@ public class VisitLimitInterceptor implements HandlerInterceptor {
             int expireTime = visitLimit.expire();
             int rangeTime = visitLimit.rangeTime();
 
+            // ip + 请求的方法路径作为key
             String key = IpUtil.getIpAddress(request) + request.getRequestURI();
-
-            logger.info("ip-->" + key);
 
             Integer currentVisit = null;// 当前访问次数
             String value = jedisUtil.getStr(key);
@@ -60,18 +56,21 @@ public class VisitLimitInterceptor implements HandlerInterceptor {
             }
 
             if (currentVisit == null){
+                // 第一次请求
                 jedisUtil.setStr(key, "1", rangeTime);
             }else if (currentVisit < limit){
+                // 在指定时间（rangeTime）内请求相同的方法，访问次数+1
                 Integer times = currentVisit + 1;
                 jedisUtil.setStr(key, times.toString(), rangeTime);
             }else {
-                Map<String, Object> info = new HashMap<>();
+                // 超出限制的访问次数，限制访问。即在expireTime内限制访问
                 jedisUtil.setStr(key, currentVisit.toString(), expireTime);
 
-                info.put("message", "小盆友！你访问太频繁了！请在" + expireTime + "秒后再访问");
-                info.put("code", ResultCode.VISIT_LIMIT);
+                // 要返回的响应消息
+                String msg = "小盆友！你访问太频繁了！请在" + expireTime + "秒后再访问";
+                int code = ResultCode.VISIT_LIMIT;
 
-                ResponseUtil.returnJson(response, info);
+                ResponseUtil.responseJson(response, code, msg);
                 return false;
             }
 

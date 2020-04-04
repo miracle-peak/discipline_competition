@@ -5,12 +5,118 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.gxuwz.subject.model.ConclusionModel">
         <id column="conclusion_id" property="conclusionId" />
+        <result column="apply_id" property="applyId" />
         <result column="prize_id" property="prizeId" />
         <result column="capital_id" property="capitalId" />
         <result column="team_no" property="teamNo" />
         <result column="status" property="status" />
         <result column="file" property="file" />
         <result column="opinion" property="opinion" />
+
+        <association property="capital" javaType="com.gxuwz.subject.model.CapitalModel">
+            <id column="capital_id" property="capitalId" />
+            <result column="enroll" property="enroll" />
+            <result column="review" property="review" />
+            <result column="train" property="train" />
+            <result column="travel" property="travel" />
+            <result column="guide" property="guide" />
+            <result column="bonus" property="bonus" />
+            <result column="consume" property="consume" />
+            <result column="lead" property="lead" />
+            <result column="organize" property="organize" />
+            <result column="sum" property="sum" />
+        </association>
+
+        <association property="prize" javaType="com.gxuwz.subject.model.PrizeModel">
+            <id column="prize_id" property="prizeId" />
+            <result column="ranking" property="ranking" />
+            <result column="level" property="level" />
+        </association>
+
+        <association property="team" javaType="com.gxuwz.subject.model.TeamModel">
+            <id column="team_no" property="teamNo" />
+            <result column="team_name" property="teamName" />
+            <result column="title" property="title" />
+            <result column="project_id" property="projectId" />
+            <result column="enroll_time" property="enrollTime" />
+            <result column="teacher_id" property="teacherId" />
+
+            <!--<collection property="memberList" ofType="com.gxuwz.subject.model.TeamMemberModel">
+                <id column="member_no" property="memberNo" />
+                <result column="team_no" property="teamNo" />
+                <result column="student_no" property="studentNo" />
+                <result column="student_name" property="studentName" />
+                <result column="college_name" property="collegeName" />
+                <result column="class_name" property="className" />
+                <result column="grade" property="grade" />
+                <result column="major" property="major" />
+                <result column="mail" property="mail" />
+                <result column="mobile_number" property="mobileNumber" />
+            </collection>-->
+        </association>
+
+        <!--<association property="project" javaType="com.gxuwz.subject.model.ProjectApplyModel">
+            <id column="id" property="id" />
+            <result column="project_id" property="projectId" />
+            <result column="budget_id" property="budgetId" />
+            <result column="opinion" property="opinion" />
+            <result column="status" property="status" />
+
+            <association property="project" javaType="com.gxuwz.subject.model.ProjectModel">
+                <id column="project_id" property="projectId" />
+                <result column="name" property="name" />
+                <result column="organization" property="organization" />
+                <result column="format" property="format" />
+                <result column="teacher_id" property="teacherId" />
+                <result column="phone" property="phone" />
+                <result column="mail" property="mail" />
+                <result column="start_date" property="startDate" />
+                <result column="end_date" property="endDate" />
+                <result column="major" property="major" />
+                <result column="sponsor" property="sponsor" />
+                <result column="contractor" property="contractor" />
+                <result column="project_date" property="projectDate" />
+                <result column="objective" property="objective" />
+                <result column="invitation" property="invitation" />
+
+            </association>
+        </association>-->
+
     </resultMap>
+
+
+<!--         select * from sys_conclusion con, sys_capital ca,-->
+<!--         sys_prize p,sys_team t, team_member m,-->
+    <select id="findByName" resultMap="BaseResultMap">
+        select * from sys_conclusion con
+--         inner join project_apply apply on con.apply_id = apply.id
+        inner join sys_capital ca on con.capital_id = ca.capital_id
+        inner join sys_prize p on con.prize_id = p.prize_id
+        inner join sys_team t on con.team_no = t.team_no
+        where con.delete_flag = 0
+<!--            <if test="name != null and name != ''">-->
+<!--                and con.name like "%" #{name} "%"-->
+<!--            </if>-->
+            <if test="current != null">
+                <if test="limit != null">
+                    limit #{current}, #{limit}
+                </if>
+            </if>
+
+    </select>
+
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(*) from sys_conclusion con
+        inner join sys_capital ca on con.capital_id = ca.capital_id
+        inner join sys_prize p on con.prize_id = p.prize_id
+        inner join sys_team t on con.team_no = t.team_no
+        where con.delete_flag = 0
+        <!--            <if test="name != null and name != ''">-->
+        <!--                and con.name like "%" #{name} "%"-->
+        <!--            </if>-->
+
+    </select>
+
 
 </mapper>

@@ -47,14 +47,7 @@ public class ProjectApplyController {
 
         List<ProjectApplyModel> list = service.findByName(name, teacherId, status, offset, limit);
 
-        int total = list.size();
-
-
-//        if (page * limit >= total){
-//            list = list.subList(offset, total);
-//        }else {
-//            list = list.subList(offset, page * limit);
-//        }
+        Integer total = service.getTotal(name, teacherId, status);
 
         return R.ok().data("list", list).data("total", total);
     }
@@ -90,7 +83,7 @@ public class ProjectApplyController {
 
     @PostMapping("/update")
     public R update(@RequestBody ProjectApplyModel projectApplyModel){
-        boolean flag = true;
+        boolean flag;
         logger.info("-->" + projectApplyModel);
 
         flag = service.updateById(projectApplyModel);
@@ -108,6 +101,22 @@ public class ProjectApplyController {
             return R.error();
         }
 
+    }
+
+    /**
+     * 项目立项审核
+     * @param projectApplyModel
+     * @return
+     */
+    @PostMapping("/examine")
+    public R examine(@RequestBody ProjectApplyModel projectApplyModel){
+        boolean flag = service.updateById(projectApplyModel);
+
+        if (flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
     }
 
     /**

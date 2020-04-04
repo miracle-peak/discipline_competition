@@ -55,16 +55,34 @@
             and project.name like "%" #{name} "%"
         </if>
         <if test="teacherId != null and teacherId != '' ">
-            and project.teacher_id like "%" #{teacherId} "%"
+            and project.teacher_id = #{teacherId}
         </if>
         <if test="status != null and status != '' ">
             and apply.status = #{status}
         </if>
 
-        <if test="current != null and current != ''">
-            <if test="limit != null and limit != ''">
+        <if test="current != null">
+            <if test="limit != null">
                 limit #{current}, #{limit}
             </if>
+        </if>
+
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(*) from project_apply apply
+        inner join sys_project project on apply.project_id = project.project_id
+        inner join sys_budget budget on apply.budget_id = budget.budget_id
+        where apply.delete_flag = 0
+
+        <if test="name != null and name != '' ">
+            and project.name like "%" #{name} "%"
+        </if>
+        <if test="teacherId != null and teacherId != '' ">
+            and project.teacher_id = #{teacherId}
+        </if>
+        <if test="status != null and status != '' ">
+            and apply.status = #{status}
         </if>
 
     </select>
