@@ -24,19 +24,16 @@ public class JedisUtil {
      * 存储jwt
      * @param key
      * @param value
-     * @param day
+     * @param expireTime
      */
-    public boolean setToken(String key, Object value, int day) {
-        int second = day * 60 * 60 * 24;
-
+    public boolean setToken(String key, Object value, long expireTime) {
         try {
-            redisTemplate.opsForValue().set(key, value, second, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(key, value, expireTime, TimeUnit.SECONDS);
 
         }catch (Exception e){
             e.printStackTrace();
             return false;
         }
-
 
         return true;
     }

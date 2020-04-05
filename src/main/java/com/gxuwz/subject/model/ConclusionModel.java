@@ -53,6 +53,6 @@ public class ConclusionModel implements Serializable {
     @TableField(exist = false)
     private PrizeModel prize;
 
-    @TableField(exist = false)
-    private TeamModel team;
+//    @TableField(exist = false)
+//    private TeamModel team;
 }

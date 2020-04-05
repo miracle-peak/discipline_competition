@@ -33,7 +33,7 @@ public class ProjectController {
                   @RequestParam("teacherId")String teacherId){
         System.out.println("status---->" + status + "name--->" + name);
 
-        List<ProjectModel> list = service.findByName(name, teacherId);
+        List<ProjectModel> list = service.findByName(name, status, teacherId);
 
         int total = list.size();
 

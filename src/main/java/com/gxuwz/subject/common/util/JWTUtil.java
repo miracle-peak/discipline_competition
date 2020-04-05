@@ -18,19 +18,15 @@ public class JWTUtil {
     // 秘钥
     private static final String SECRET = "tale_jwt";
 
-
     /**
      * 生成jwt
      * @param id
      * @param userName
      * @param uType
+     * @param expireTime
      * @return
      */
-    public static String createToken(String id, String userName, String uType) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR, 24 * 6); // 设置过期时间
-        Date expireTime = calendar.getTime(); // 过期时间
-
+    public static String createToken(String id, String userName, String uType, Date expireTime) {
         Map<String, Object> info = new HashMap<>();
 
         info.put("id", id);

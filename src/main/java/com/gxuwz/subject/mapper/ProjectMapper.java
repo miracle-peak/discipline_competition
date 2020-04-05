@@ -15,5 +15,6 @@ import java.util.List;
  */
 public interface ProjectMapper extends BaseMapper<ProjectModel> {
 
-    List<ProjectModel> findByName(@Param("name")String name, @Param("teacherId")String teacherId);
+    List<ProjectModel> findByName(@Param("name")String name,@Param("status")String status,
+                                  @Param("teacherId")String teacherId);
 }

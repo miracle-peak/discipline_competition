@@ -10,6 +10,9 @@ import com.gxuwz.subject.common.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * <p>
  *  前端控制器
@@ -35,15 +38,11 @@ public class UserController {
     @RequestMapping("/login")
     @VisitLimit(limit = 3, rangeTime = 5, expire = 60)
     public R login(@RequestBody UserModel userModel){
-        System.out.println("login--->");
-
         if (userModel == null){
             return R.error().message("啥也没有");
         }
         String userName = userModel.getUserName();
         String password = userModel.getPassword();
-
-        System.out.println("========" + userName + "**&&" + password);
 
         if(userName.equals("") || userName == null){
             return R.error().message("请输入用户名");
@@ -57,9 +56,6 @@ public class UserController {
         wrapper.eq("user_name", userName);
         wrapper.eq("password", password);
 
-
-        System.out.println("user:" + userName);
-
         UserModel one = userService.getOne(wrapper);
         if (one != null){
             String token = "";
@@ -67,9 +63,16 @@ public class UserController {
             token = jedistUtil.getStr(one.getId() + "");
             System.out.println("getStr---->" + token);
             if (token == null || "".equals(token)) {
-                token = JWTUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype());
+                // 保证redis和jwt设置过期时间相同
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.HOUR, 24 * 6); // 设置过期时间
+                Date expireTime = calendar.getTime(); // 过期时间
+                long time = expireTime.getTime(); // 获取过期时间的时间戳
+                System.out.println("过期时间---->" + time);
 
-                flag = jedistUtil.setToken(one.getId() + "", token, 7); // 存jwt到redis过期时间7天
+                token = JWTUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
+
+                flag = jedistUtil.setToken(one.getId() + "", token, time); // 存jwt到redis过期时间7天
             }
 
             if (flag){

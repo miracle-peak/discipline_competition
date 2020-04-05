@@ -2,7 +2,6 @@ package com.gxuwz.subject.service;
 
 import com.gxuwz.subject.model.ProjectModel;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
@@ -15,5 +14,5 @@ import java.util.List;
  */
 public interface IProjectService extends IService<ProjectModel> {
 
-    List<ProjectModel> findByName(@Param("name")String name, @Param("teacherId")String teacherId);
+    List<ProjectModel> findByName(String name,String status, String teacherId);
 }

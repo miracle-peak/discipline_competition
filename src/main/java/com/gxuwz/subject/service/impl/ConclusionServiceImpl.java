@@ -24,7 +24,7 @@ public class ConclusionServiceImpl extends ServiceImpl<ConclusionMapper, Conclus
     private ConclusionMapper mapper;
 
     @Override
-    public List<ConclusionMapper> findByName(String name, Integer current, Integer limit) {
+    public List<ConclusionModel> findByName(String name, Integer current, Integer limit) {
         return mapper.findByName(name, current, limit);
     }
 

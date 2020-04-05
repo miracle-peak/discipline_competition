@@ -34,11 +34,14 @@
         select sys_project.*,id, status, budget_id,opinion
         from project_apply, sys_project
         where project_apply.project_id = sys_project.project_id
+        <if test="status != null and status != '' ">
+            and project_apply.status = #{status}
+        </if>
         <if test="name != null and name != '' ">
             and sys_project.name like "%" #{name} "%"
         </if>
         <if test="teacherId != null and teacherId != '' ">
-            and sys_project.teacher_id like "%" #{teacherId} "%"
+            and sys_project.teacher_id = #{teacherId}
         </if>
 
     </select>

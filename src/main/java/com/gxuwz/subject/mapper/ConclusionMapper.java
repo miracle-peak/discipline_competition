@@ -4,7 +4,6 @@ import com.gxuwz.subject.model.ConclusionModel;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
@@ -18,7 +17,7 @@ import java.util.List;
 @Mapper
 public interface ConclusionMapper extends BaseMapper<ConclusionModel> {
 
-    List<ConclusionMapper> findByName(@Param("name")String name, @Param("current")Integer current,
+    List<ConclusionModel> findByName(@Param("name")String name, @Param("current")Integer current,
                                       @Param("limit")Integer limit);
 
     Integer getTotal(@Param("name")String name);

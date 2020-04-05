@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
      * @param e
      * @return
      */
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    /*@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Throwable.class)
     public R handleException(Throwable e) {
         if (e instanceof JedisConnectionException) {
@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
             return new R(ResultCode.REDIS_ERROR, "系统服务器异常请通知管理员！redis error");
         }
         return new R(ResultCode.SYSTEM_ERROR, "系统错误！throwable");
-    }
+    }*/
 
 
 }

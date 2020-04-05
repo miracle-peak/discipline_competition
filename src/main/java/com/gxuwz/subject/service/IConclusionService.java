@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface IConclusionService extends IService<ConclusionModel> {
 
-    List<ConclusionMapper> findByName(String name, Integer current, Integer limit);
+    List<ConclusionModel> findByName(String name, Integer current, Integer limit);
 
     Integer getTotal(String name);
 }

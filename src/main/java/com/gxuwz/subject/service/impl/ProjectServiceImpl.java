@@ -25,7 +25,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectModel>
     private ProjectMapper mapper;
 
     @Override
-    public List<ProjectModel> findByName(String name, String teacherId) {
-        return mapper.findByName(name, teacherId);
+    public List<ProjectModel> findByName(String name, String status, String teacherId) {
+        return mapper.findByName(name, status, teacherId);
     }
 }
