@@ -92,6 +92,9 @@
 --         inner join project_apply apply on con.apply_id = apply.id
         inner join sys_capital ca on con.capital_id = ca.capital_id
         inner join sys_prize p on con.prize_id = p.prize_id
+--         inner join (select * FROM sys_team team
+--         inner join team_member member on team.team_no = member.team_no
+--         where team.delete_flag = 0) as t on con._team_no = t.team_no
         inner join sys_team t on con.team_no = t.team_no
         where con.delete_flag = 0
 <!--            <if test="name != null and name != ''">-->

@@ -31,6 +31,8 @@ public class MyConfigurer implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 
         registry.addInterceptor(getInterceptor()).excludePathPatterns("/login")
+                // 允许访问文件
+                .excludePathPatterns("/file/**")
                 // 允许访问swagger
                 .excludePathPatterns("/swagger-ui.html")
                 .excludePathPatterns("/webjars/**")

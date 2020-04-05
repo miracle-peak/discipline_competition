@@ -33,4 +33,9 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, TeamModel> implemen
     public Integer getTotal(String title, String teacherId) {
         return teamMapper.getTotal(title, teacherId);
     }
+
+    @Override
+    public List<TeamModel> findByTeacher(String title, String teacherId) {
+        return teamMapper.findByTeacher(title, teacherId);
+    }
 }

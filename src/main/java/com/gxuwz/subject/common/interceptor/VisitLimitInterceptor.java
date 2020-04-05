@@ -67,7 +67,7 @@ public class VisitLimitInterceptor implements HandlerInterceptor {
                 jedisUtil.setStr(key, currentVisit.toString(), expireTime);
 
                 // 要返回的响应消息
-                String msg = "小盆友！你访问太频繁了！请在" + expireTime + "秒后再访问";
+                String msg = "小盆友！你操作太频繁了！请在" + expireTime + "秒后再访问";
                 int code = ResultCode.VISIT_LIMIT;
 
                 ResponseUtil.responseJson(response, code, msg);

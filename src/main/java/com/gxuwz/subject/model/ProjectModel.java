@@ -40,9 +40,9 @@ public class ProjectModel implements Serializable {
 
     private String mail;
 
-    private Date startDate;
+    private String startDate;
 
-    private Date endDate;
+    private String endDate;
 
     private String major;
 
@@ -50,7 +50,7 @@ public class ProjectModel implements Serializable {
 
     private String contractor;
 
-    private Date projectDate;
+    private String projectDate;
 
     private String objective;
 

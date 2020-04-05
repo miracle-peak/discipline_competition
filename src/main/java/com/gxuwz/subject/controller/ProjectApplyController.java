@@ -54,7 +54,7 @@ public class ProjectApplyController {
 
     @PostMapping("/save")
     public R add(@RequestBody ProjectApplyModel projectApplyModel){
-        boolean flag = true;
+        boolean flag;
 
         flag = budgetService.save(projectApplyModel.getBudget());
         if (! flag){

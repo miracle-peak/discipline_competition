@@ -22,4 +22,6 @@ public interface TeamMapper extends BaseMapper<TeamModel> {
       @Param("current")Integer current, @Param("limit")Integer limit);
 
     Integer getTotal(@Param("title")String title, @Param("teacherId")String teacherId);
+
+    List<TeamModel> findByTeacher(@Param("title")String title, @Param("teacherId")String teacher);
 }

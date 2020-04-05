@@ -50,6 +50,20 @@
     </select>
 
 
+    <select id="findByTeacher" resultMap="BaseResultMap">
+        select * FROM sys_team team
+        inner join team_member member on team.team_no = member.team_no
+        where team.delete_flag = 0
+        <if test="title != null and title != ''">
+            and team.title like "%" #{title} "%"
+        </if>
+        <if test="teacherId != null and teacherId != ''">
+            and team.teacher_id = #{teacherId}
+        </if>
+
+    </select>
+
+
     <select id="getTotal" resultType="java.lang.Integer">
         select count(*) FROM sys_team team
 --         inner join team_member member on team.team_no = member.team_no

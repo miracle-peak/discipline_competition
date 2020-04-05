@@ -10,6 +10,7 @@ public interface ResultCode {
     int VISIT_LIMIT = 11111; // 频繁访问
 
     int CONNECTION_ERROR = 40001; // 服务器连接失败，如redis连接失败
+    int REDIS_ERROR = 40003;
 
 
     // 异常
