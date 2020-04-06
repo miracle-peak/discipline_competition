@@ -24,12 +24,13 @@ public class ConclusionServiceImpl extends ServiceImpl<ConclusionMapper, Conclus
     private ConclusionMapper mapper;
 
     @Override
-    public List<ConclusionModel> findByName(String name, Integer current, Integer limit) {
-        return mapper.findByName(name, current, limit);
+    public List<ConclusionModel> findByName(String name, Integer current, Integer limit,
+                                            String teacherId, String status) {
+        return mapper.findByName(name, current, limit, teacherId, status);
     }
 
     @Override
-    public Integer getTotal(String name) {
-        return mapper.getTotal(name);
+    public Integer getTotal(String name, String teacherId, String status) {
+        return mapper.getTotal(name, teacherId, status);
     }
 }

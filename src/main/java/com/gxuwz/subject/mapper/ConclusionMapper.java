@@ -18,7 +18,9 @@ import java.util.List;
 public interface ConclusionMapper extends BaseMapper<ConclusionModel> {
 
     List<ConclusionModel> findByName(@Param("name")String name, @Param("current")Integer current,
-                                      @Param("limit")Integer limit);
+            @Param("limit")Integer limit, @Param("teacherId")String teacherId,
+              @Param("status")String status);
 
-    Integer getTotal(@Param("name")String name);
+    Integer getTotal(@Param("name")String name, @Param("teacherId")String teacherId,
+                     @Param("status")String status);
 }

@@ -36,6 +36,8 @@ public class ConclusionModel implements Serializable {
 
     private String teamNo;
 
+    private String teacherId;
+
     private String status;
 
     private String file;

@@ -8,6 +8,8 @@ import com.gxuwz.subject.model.TeamModel;
 import com.gxuwz.subject.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,15 +38,16 @@ public class ConclusionController {
 
     @GetMapping("/list")
     public R list(@RequestParam("name")String name,  @RequestParam("limit")Integer limit,
-                  @RequestParam("page")Integer page, @RequestParam("teacherId")String teacherId){
+                  @RequestParam("page")Integer page, @RequestParam("teacherId")String teacherId,
+                  @RequestParam("status")String status){
         int current = (page - 1) * limit;
 
-        List<ConclusionModel> list = service.findByName(name, current, limit);
+        List<ConclusionModel> list = service.findByName(name, current, limit, teacherId, status);
 
         List<TeamMemberModel> memberList = memberService.list();
 //        List<TeamModel> teamList = teamService.list();
 
-        Integer total = service.getTotal(name);
+        Integer total = service.getTotal(name, teacherId, status);
 
 //        return R.ok().data("list", list).data("team", teamList);
         return R.ok().data("list", list).data("total", total).data("member", memberList);
@@ -124,10 +127,10 @@ public class ConclusionController {
         return R.ok();
     }
 
-    @PostMapping("delete/{id}")
-    public R delete(@PathVariable("id")Integer id){
+    @PostMapping("delete")
+    public R delete(@RequestBody Integer[] ids){
 
-        boolean flag = service.removeById(id);
+        boolean flag = service.removeByIds(Arrays.asList(ids));
         if (! flag){
             return R.error();
         }
