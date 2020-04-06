@@ -52,6 +52,11 @@ public class ProjectApplyController {
         return R.ok().data("list", list).data("total", total);
     }
 
+    /**
+     * 项目立项申请
+     * @param projectApplyModel
+     * @return
+     */
     @PostMapping("/save")
     public R add(@RequestBody ProjectApplyModel projectApplyModel){
         boolean flag;
@@ -81,12 +86,17 @@ public class ProjectApplyController {
     }
 
 
+    /**
+     * 项目立项修改
+     * @param projectApplyModel
+     * @return
+     */
     @PostMapping("/update")
     public R update(@RequestBody ProjectApplyModel projectApplyModel){
-        boolean flag;
-        logger.info("-->" + projectApplyModel);
-
-        flag = service.updateById(projectApplyModel);
+        boolean flag = service.updateById(projectApplyModel);
+        if (! flag){
+            return R.error();
+        }
         logger.info("teacherId-->" + projectApplyModel.getProject().getTeacherId());
 
         flag = projectService.updateById(projectApplyModel.getProject());
@@ -120,7 +130,7 @@ public class ProjectApplyController {
     }
 
     /**
-     * 项目申请提交
+     * 项目立项申请提交
      * @param projectApplyModel
      * @return
      */
@@ -137,6 +147,11 @@ public class ProjectApplyController {
         }
     }
 
+    /**
+     * 删除单个项目立项
+     * @param id
+     * @return
+     */
     @GetMapping("/delete/{id}")
     public R delete(@PathVariable("id") Integer id){
 
@@ -149,12 +164,18 @@ public class ProjectApplyController {
         }
     }
 
+    /**
+     * 批量删除项目立项
+     * @param ids
+     * @return
+     */
     @PostMapping("/batchRemove")
     public R batchRemove(@RequestBody Integer[] ids){
-//        List<Integer> idList = new ArrayList<>();
-//        for (String id:ids
+
+        // 不能删除已经通过的项目立项
+//        for (Integer id:ids
 //             ) {
-//            idList.add(Integer.parseInt(id));
+//
 //        }
 
         boolean flag = service.removeByIds(Arrays.asList(ids));

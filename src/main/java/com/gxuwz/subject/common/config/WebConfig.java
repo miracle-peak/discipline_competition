@@ -2,6 +2,8 @@ package com.gxuwz.subject.common.config;
 
 import com.gxuwz.subject.common.filter.MyFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 
@@ -11,10 +13,10 @@ import java.util.ArrayList;
  * @Version V1.0
  * 注册过滤器
  **/
-//@Configuration
+@Configuration
 public class WebConfig {
 
-//    @Bean
+    @Bean
     public FilterRegistrationBean filterRegister(){
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
 

@@ -75,11 +75,14 @@ public class TeamController {
         return R.ok().data("list", list).data("total", total);
     }
 
+    /**
+     * 添加团队信息包括成员
+     * @param teamModel
+     * @return
+     */
     @PostMapping("/add")
     @VisitLimit(limit = 3, rangeTime = 3, expire = 30)
     public R add(@RequestBody TeamModel teamModel){
-        System.out.println("saveOrUpdate--->" + teamModel);
-
         // 生成团队编号
         long currentTimeMillis = System.currentTimeMillis();
         teamModel.setTeamNo(currentTimeMillis + "");
@@ -137,7 +140,7 @@ public class TeamController {
         }
 
         // 也可以不删除成员信息
-        // 一下是删除批量成员
+        // 以下是删除批量成员
         QueryWrapper<TeamMemberModel> queryWrapper = new QueryWrapper();
 
         List<Integer> memberNos = new ArrayList<>();
