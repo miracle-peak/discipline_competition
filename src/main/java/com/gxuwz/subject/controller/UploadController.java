@@ -4,6 +4,11 @@ import com.gxuwz.subject.common.util.R;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
@@ -18,6 +23,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.Map;
 
 /**
@@ -32,6 +38,9 @@ public class UploadController {
     Logger logger = LoggerFactory.getLogger(UploadController.class);
 
     private static final String RELATIVE_PATH = "/src/main/resources/static/file/";
+
+    // Windows和linux下都可用的文件目录 /
+    public static final String separator = File.separator;
 
     /**
      * 文件上传
@@ -54,37 +63,15 @@ public class UploadController {
         }
         String imgFilePath = ""; // 文件路径
         String fileName = System.currentTimeMillis() + "_" + name; // 文件名称
-        // 本地路径
-//        String path = request.getSession().getServletContext().getRealPath("/upload/");
-//        logger.info("path--->" + path);
-
-//        String pathResource = ClassUtils.getDefaultClassLoader().getResource("").getPath();
-//        logger.info("resource--->" + pathResource);
 
         String sysPath = System.getProperty("user.dir");
         logger.info("sysPath--->" + sysPath);
 
-        /*File projectPath;
-        try {
-            projectPath = new File(ResourceUtils.getURL("classpath:").getPath());
-
-            logger.info("projectPath--->" + projectPath);
-            if (! projectPath.exists()){
-                projectPath = new File("");
-            }
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return R.error().message("上传文件失败");
-        }*/
-
         BASE64Decoder decoder = new BASE64Decoder();
 
         int indexOf = base64Str.indexOf(";");
-        base64Str = base64Str.substring(indexOf + 8); // 去掉文件类型
+        base64Str = base64Str.substring(indexOf + 8); // 去掉文件类型取bas64字符串
 
-//        int indexOf = base64Str.indexOf("base64");
-//        base64Str = base64Str.substring(indexOf + 7); // 去掉文件类型
         try{
             //Base64解码
             byte[] b = decoder.decodeBuffer(base64Str);
@@ -96,10 +83,9 @@ public class UploadController {
             }
             // 生成的文件路径
             imgFilePath = sysPath + RELATIVE_PATH + fileName;
-//            imgFilePath = path + fileName;
             // 将反斜杠转换为斜杠
             imgFilePath = imgFilePath.replaceAll( "\\\\", "/");
-            System.out.println("imgPath" + imgFilePath);
+
             File upload = new File(sysPath, RELATIVE_PATH);
             if(!upload.exists()){
                 upload.mkdirs();
@@ -120,33 +106,30 @@ public class UploadController {
 
     /**
      * 下载文件
-     * @param fileName
+     * @param
      * @return
      */
     @PostMapping("/download")
     public void download(HttpServletResponse response, @RequestBody Map<String, Object> param) throws Exception {
-        String fileName = (String) param.get("fileName");
-
-        String name = fileName.substring(fileName.indexOf("_") + 1);
+        String fileName = (String) param.get("fileName"); // 文件全名
+        String name = fileName.substring(fileName.indexOf("_") + 1); // 文件名
 
         log.info("fileName-->" + fileName);
-//        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-//
-//        String contentType = new MimetypesFileTypeMap().getContentType(fileName);
-//
-//        response.setHeader("Content-type", contentType);
-////        res.setHeader("content-type", "application/octet-stream");
-////        res.setContentType("application/octet-stream");
-//        response.setHeader("Content-Disposition", "attachment;filename=" + new String((name).getBytes("gbk"), "iso8859-1"));
+
+        String contentType = new MimetypesFileTypeMap().getContentType(fileName);
+
+        response.setHeader("Content-type", contentType);
         String sysPath = System.getProperty("user.dir");
         String filePath = sysPath + RELATIVE_PATH + fileName;
 
-
         File file = new File(filePath);
+        // 如果文件存在，则进行下载
         if (file.exists()) {
-            log.info("exists--->");
-            response.setHeader("content-type", "application/octet-stream");
+            // 配置文件下载
+//            response.setHeader("content-type", "application/octet-stream");
             response.setContentType("application/octet-stream");
+            // 下载文件能正常显示中文
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(name, "UTF-8"));
             // 实现文件下载
             byte[] buffer = new byte[1024];
             FileInputStream fis = null;
@@ -160,13 +143,87 @@ public class UploadController {
                     os.write(buffer, 0, i);
                     i = bis.read(buffer);
                 }
+                log.info("Download  successfully!");
             } catch (Exception e) {
-                e.printStackTrace();
+                return;
+            } finally {
+                if (bis != null) {
+                    bis.close();
+                }
+                if (fis != null) {
+                    fis.close();
+                }
             }
         }
 
+
+        /*ResponseEntity<InputStreamResource> response = null;
+        try {
+
+            ClassPathResource classPathResource = new ClassPathResource(filePath);
+            InputStream inputStream = classPathResource.getInputStream();
+
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+            headers.add("Content-Disposition",
+                    "attachment; filename="
+                            + new String(name.getBytes("gbk"), "iso8859-1") + ".pdf");
+            headers.add("Pragma", "no-cache");
+            headers.add("Expires", "0");
+            response = ResponseEntity.ok().headers(headers)
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .body(new InputStreamResource(inputStream));
+        } catch (FileNotFoundException e1) {
+            log.error("找不到指定的文件", e1);
+        } catch (IOException e) {
+            log.error("获取不到文件流", e);
+        }
+        return response;*/
+
+
+
+
+
+
+        /*File file = new File(realPath, fileName);
+        if (file.exists()) {
+
+            response.setHeader("content-type", "application/octet-stream");
+            response.setContentType("application/octet-stream");
+            // 下载文件能正常显示中文
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+
+            // 实现文件下载
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            try {
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                OutputStream os = response.getOutputStream();
+                int i = bis.read(buffer);
+                while (i != -1) {
+                    os.write(buffer, 0, i);
+                    i = bis.read(buffer);
+                }
+                os.flush();
+                System.out.println("Download the song successfully!");
+            } catch (Exception e) {
+                System.out.println("Download the song failed!");
+            } finally {
+                if (bis != null) {
+                    bis.close();
+                }
+                if (fis != null) {
+                    fis.close();
+                }
+            }
+        }*/
+
+
         // 发送给客户端的数据
-        /*OutputStream outputStream = res.getOutputStream();
+        /*OutputStream outputStream = response.getOutputStream();
         byte[] buff = new byte[1024];
         BufferedInputStream bis = null;
         // 读取filename
@@ -234,7 +291,6 @@ public class UploadController {
             }
         }*/
 
-//        return R.ok();
     }
 
 }
