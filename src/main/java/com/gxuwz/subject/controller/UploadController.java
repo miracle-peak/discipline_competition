@@ -1,23 +1,23 @@
 package com.gxuwz.subject.controller;
 
 import com.gxuwz.subject.common.util.R;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import sun.misc.BASE64Decoder;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.Map;
 
 /**
@@ -27,13 +27,19 @@ import java.util.Map;
  **/
 @RequestMapping("/upload")
 @RestController
+@Slf4j
 public class UploadController {
     Logger logger = LoggerFactory.getLogger(UploadController.class);
 
     private static final String RELATIVE_PATH = "/src/main/resources/static/file/";
 
+    /**
+     * 文件上传
+     * @param params
+     * @return
+     */
     @PostMapping("/upload")
-    public R upload(@RequestBody Map<String, Object> params, HttpServletRequest request){
+    public R upload(@RequestBody Map<String, Object> params){
         String base64Str = ""; // base64文件字符串
         String name = "";  // 文件名称
         if (params.containsKey("baseString")){
@@ -109,6 +115,126 @@ public class UploadController {
         }
 
         return R.ok().data("fileName", fileName).data("name", name);
+    }
+
+
+    /**
+     * 下载文件
+     * @param fileName
+     * @return
+     */
+    @PostMapping("/download")
+    public void download(HttpServletResponse response, @RequestBody Map<String, Object> param) throws Exception {
+        String fileName = (String) param.get("fileName");
+
+        String name = fileName.substring(fileName.indexOf("_") + 1);
+
+        log.info("fileName-->" + fileName);
+//        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+//
+//        String contentType = new MimetypesFileTypeMap().getContentType(fileName);
+//
+//        response.setHeader("Content-type", contentType);
+////        res.setHeader("content-type", "application/octet-stream");
+////        res.setContentType("application/octet-stream");
+//        response.setHeader("Content-Disposition", "attachment;filename=" + new String((name).getBytes("gbk"), "iso8859-1"));
+        String sysPath = System.getProperty("user.dir");
+        String filePath = sysPath + RELATIVE_PATH + fileName;
+
+
+        File file = new File(filePath);
+        if (file.exists()) {
+            log.info("exists--->");
+            response.setHeader("content-type", "application/octet-stream");
+            response.setContentType("application/octet-stream");
+            // 实现文件下载
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            try {
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                OutputStream os = response.getOutputStream();
+                int i = bis.read(buffer);
+                while (i != -1) {
+                    os.write(buffer, 0, i);
+                    i = bis.read(buffer);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 发送给客户端的数据
+        /*OutputStream outputStream = res.getOutputStream();
+        byte[] buff = new byte[1024];
+        BufferedInputStream bis = null;
+        // 读取filename
+        bis = new BufferedInputStream(new FileInputStream(new File(filePath)));
+        int i = bis.read(buff);
+        while (i != -1) {
+            outputStream.write(buff, 0, buff.length);
+            outputStream.flush();
+            i = bis.read(buff);
+        }*/
+
+
+
+        /*InputStream f= this.getClass().getResourceAsStream("/static/file/" + fileName);
+
+        response.reset();
+        response.setContentType("application/x-msdownload;charset=utf-8");
+
+        String name = fileName.substring(fileName.indexOf("_") + 1);
+
+        try {
+            response.setHeader("Content-Disposition", "attachment;filename="+ new String((name).getBytes("gbk"), "iso-8859-1"));//下载文件的名称
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        ServletOutputStream out = null;
+        try {
+            out = response.getOutputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BufferedInputStream bis = null;
+        BufferedOutputStream bos = null;
+        try {
+            bis = new BufferedInputStream(f);
+            bos = new BufferedOutputStream(out);
+            byte[] buff = new byte[2048];
+            int bytesRead;
+            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+                bos.write(buff, 0, bytesRead);
+            }
+            bos.flush();
+            bos.close();
+            bis.close();
+        } catch (final IOException e) {
+            try {
+                throw e;
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        } finally {
+            if (bis != null){
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (bos != null){
+                try {
+                    bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }*/
+
+//        return R.ok();
     }
 
 }

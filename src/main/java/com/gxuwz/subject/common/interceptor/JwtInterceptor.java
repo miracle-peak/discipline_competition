@@ -27,10 +27,11 @@ public class JwtInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
-        System.out.println("pre-->");
 
         if (! uri.contains("/user/login") && ! uri.contains("/file")){ // 不拦截登录请求
             String jwt = request.getHeader("Authorization");
+
+            System.out.println("jwt-->" + jwt);
 
             Map<String, Object> resp = new HashMap<>();
 
@@ -52,7 +53,6 @@ public class JwtInterceptor implements HandlerInterceptor {
 
                         return false;
                     }
-
 
                 }else {// 可能是伪造的jwt
                     resp.put("message", "对不起！您的token 有误！token error");

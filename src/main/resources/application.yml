@@ -21,7 +21,12 @@ spring:
 #      force: true
 #      enabled: true
 
-
+# swagger.json的访问request mapping路径
+springfox:
+  documenttation:
+    swagger:
+      v2:
+        path: /api-docs
 
   # redis配置
   redis:
