@@ -8,6 +8,7 @@ import com.gxuwz.subject.service.IUserService;
 import com.gxuwz.subject.common.util.*;
 //import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
@@ -57,7 +58,8 @@ public class UserController {
         wrapper.eq("password", password);
 
         UserModel one = userService.getOne(wrapper);
-        if (one != null){
+
+        if (! ObjectUtils.isEmpty(one)){
             String token = "";
             boolean flag = true;
             token = jedistUtil.getStr(one.getId() + "");
@@ -91,8 +93,8 @@ public class UserController {
             }
 
         }
-
         return R.error().message("密码错误");
+
     }
 
     @RequestMapping("/add")

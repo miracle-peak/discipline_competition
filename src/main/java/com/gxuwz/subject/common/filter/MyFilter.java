@@ -24,6 +24,8 @@ public class MyFilter implements Filter {
         // 预检请求处理
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+        httpRequest.setCharacterEncoding("UTF-8");
+        httpResponse.setCharacterEncoding("UTF-8");
         httpResponse.setHeader("Access-Control-Allow-Origin", "*");
         httpResponse.setHeader("Access-Control-Allow-Methods", "*");
         httpResponse.setHeader("Access-Control-Max-Age", "3600");

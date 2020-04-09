@@ -27,8 +27,6 @@ public class ConclusionController {
     @Autowired
     private IConclusionService service;
     @Autowired
-    private ITeamService teamService;
-    @Autowired
     private ITeamMemberService memberService;
     @Autowired
     private IPrizeService prizeService;
@@ -61,7 +59,6 @@ public class ConclusionController {
      */
     @PostMapping("/add")
     public R add(@RequestBody ConclusionModel conclusionModel){
-
         boolean flag = capitalService.save(conclusionModel.getCapital());
         if (! flag){
             return R.error();
