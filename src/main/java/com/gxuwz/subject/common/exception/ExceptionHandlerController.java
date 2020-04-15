@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.gxuwz.subject.common.util.ResultCode;
+import com.gxuwz.subject.common.util.StatusCode;
 
 /**
  * 用于未被全局异常处理的错误 如：404
@@ -25,17 +25,17 @@ public class ExceptionHandlerController implements ErrorController {
         // 错误处理逻辑
         int status = response.getStatus();
         if (status == 404) {
-            return new R(ResultCode.NOT_FOUND, "小伙子你有点调皮哦！(*^▽^*)not found");
+            return new R(StatusCode.NOT_FOUND, "小伙子你有点调皮哦！(*^▽^*)not found");
         } else if (status == 500) {
-            return new R(ResultCode.EXCEPTION_500, "小伙子你麻烦大了！(*^▽^*)");
+            return new R(StatusCode.EXCEPTION_500, "小伙子你麻烦大了！(*^▽^*)");
         } else if (status >= 100 && status < 200) {
-            return new R(ResultCode.HTTP_ERROR_100, null);
+            return new R(StatusCode.HTTP_ERROR_100, null);
         } else if (status >= 300 && status < 400) {
-            return new R(ResultCode.HTTP_ERROR_300, null);
+            return new R(StatusCode.HTTP_ERROR_300, null);
         } else if (status >= 400 && status < 500) {
-            return new R(ResultCode.HTTP_ERROR_400, null);
+            return new R(StatusCode.HTTP_ERROR_400, null);
         } else {
-            return new R(ResultCode.SYSTEM_ERROR, "小伙子你麻烦大了！(*^▽^*)");
+            return new R(StatusCode.SYSTEM_ERROR, "小伙子你麻烦大了！(*^▽^*)");
         }
     }
 

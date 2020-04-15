@@ -1,0 +1,10 @@
+version: '2'
+services:
+  tasklist:
+    restart: always
+    container_name: subject
+    dockerfile: Dockerfile
+    volumes:
+      - .:/code
+    ports:
+      - "8888:8888"

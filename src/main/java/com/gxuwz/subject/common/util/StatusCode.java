@@ -1,6 +1,6 @@
 package com.gxuwz.subject.common.util;
 
-public interface ResultCode {
+public interface StatusCode {
 
     int SUCCESS = 666;  // 操作成功
     int ERROR = 2233;   // 操作失败

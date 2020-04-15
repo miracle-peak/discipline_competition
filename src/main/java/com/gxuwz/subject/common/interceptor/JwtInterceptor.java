@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.gxuwz.subject.common.util.JWTUtil;
 import com.gxuwz.subject.common.util.JedisUtil;
 import com.gxuwz.subject.common.util.ResponseUtil;
-import com.gxuwz.subject.common.util.ResultCode;
+import com.gxuwz.subject.common.util.StatusCode;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -47,7 +47,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                     System.out.println("token--->" + token);
                     if (! jwt.equals(token)){// jwt不一致
                         resp.put("message", "对不起！您的token 有误！token error");
-                        resp.put("code", ResultCode.TOKEN_ERROR);
+                        resp.put("code", StatusCode.TOKEN_ERROR);
 
                         ResponseUtil.returnJson(response, resp);
 
@@ -56,7 +56,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
                 }else {// 可能是伪造的jwt
                     resp.put("message", "对不起！您的token 有误！token error");
-                    resp.put("code", ResultCode.TOKEN_ERROR);
+                    resp.put("code", StatusCode.TOKEN_ERROR);
 
                     ResponseUtil.returnJson(response, resp);
                     return false;
@@ -64,7 +64,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
             }else {// 被拦截时也给出响应
                 resp.put("message", "对不起！您木有权限！请尝试登录");
-                resp.put("code", ResultCode.TOKEN_NONE);
+                resp.put("code", StatusCode.TOKEN_NONE);
 
                 ResponseUtil.returnJson(response, resp);
 

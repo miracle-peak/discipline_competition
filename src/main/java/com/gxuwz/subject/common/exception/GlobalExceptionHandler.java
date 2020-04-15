@@ -1,7 +1,7 @@
 package com.gxuwz.subject.common.exception;
 
 import com.gxuwz.subject.common.util.R;
-import com.gxuwz.subject.common.util.ResultCode;
+import com.gxuwz.subject.common.util.StatusCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -12,8 +12,6 @@ import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import redis.clients.jedis.exceptions.JedisConnectionException;
-import redis.clients.jedis.exceptions.JedisException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -34,9 +32,9 @@ public class GlobalExceptionHandler {
             ServletRequestBindingException.class, MethodArgumentNotValidException.class, ConstraintViolationException.class})
     public R handleHttpMessageNotReadableException(Exception e) {
         if (e instanceof BindException){
-            return new R(ResultCode.EXCEPTION_400, ((BindException)e).getAllErrors().get(0).getDefaultMessage());
+            return new R(StatusCode.EXCEPTION_400, ((BindException)e).getAllErrors().get(0).getDefaultMessage());
         }
-        return new R(ResultCode.EXCEPTION_400, e.getMessage());
+        return new R(StatusCode.EXCEPTION_400, e.getMessage());
     }
 
     /**
@@ -46,7 +44,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public R handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        return new R(ResultCode.EXCEPTION_NOT_METHOD, "小盆友别乱来哦，not method");
+        return new R(StatusCode.EXCEPTION_NOT_METHOD, "小盆友别乱来哦，not method");
     }
 
     /**

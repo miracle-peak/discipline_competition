@@ -89,7 +89,7 @@ public class UserController {
 
                 return R.ok().message("登录成功").data("token", token).data("uType", one.getUtype());
             }else {
-                R.error().message("服务连接失败！").setCode(ResultCode.CONNECTION_ERROR);
+                R.error().message("服务连接失败！").setCode(StatusCode.CONNECTION_ERROR);
             }
 
         }

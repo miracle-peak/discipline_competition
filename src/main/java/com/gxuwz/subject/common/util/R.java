@@ -24,7 +24,7 @@ public class R {
     public static R ok(){
         R r = new R();
         r.setMessage("操作成功");
-        r.setCode(ResultCode.SUCCESS);
+        r.setCode(StatusCode.SUCCESS);
         r.setSuccess(true);
 
         return r;
@@ -34,7 +34,7 @@ public class R {
     public static R error(){
         R r = new R();
         r.setMessage("操作失败");
-        r.setCode(ResultCode.ERROR);
+        r.setCode(StatusCode.ERROR);
         r.setSuccess(false);
 
         return r;

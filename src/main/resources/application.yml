@@ -15,7 +15,7 @@ spring:
   # redis配置
   redis:
     port: 6379
-    password:
+    password: ENC(qQP6p0t7OegwIl5Ue1mkVg==)
     database: 1
     host: 127.0.0.1
     jedis:
@@ -74,8 +74,8 @@ jasypt:
   encryptor:
     # 盐
     password: tale666cqf88miracle6TALE_CQF
-#    property:
-      # 自定义属性规则，默认前缀是“ENC(”，后缀为“)”
+      #    property:
+    # 自定义属性规则，默认前缀是“ENC(”，后缀为“)”
 #      prefix: "ENC["
 #      suffix: "]"
 

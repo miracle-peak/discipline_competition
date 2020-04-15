@@ -77,7 +77,7 @@
             <version>1.2.66</version>
         </dependency>
 
-        <!--        密码加密-->
+        <!-- 配置加密-->
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>

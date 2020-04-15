@@ -21,7 +21,7 @@ public class MyTest {
         textEncryptor.setPassword("tale666cqf88miracle6TALE_CQF");
         //要加密的数据（数据库的用户名或密码）
         String username = textEncryptor.encrypt("");
-        String password = textEncryptor.encrypt("123456");
+        String password = textEncryptor.encrypt("6379");
         System.out.println("username:" + username);
         System.out.println("password:" + password);
 
