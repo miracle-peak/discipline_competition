@@ -2,6 +2,7 @@ package com.gxuwz.subject.common.exception;
 
 import com.gxuwz.subject.common.util.R;
 import com.gxuwz.subject.common.util.StatusCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -22,6 +23,7 @@ import javax.validation.ConstraintViolationException;
  * @Version V1.0
  **/
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     /**
@@ -44,8 +46,19 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public R handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        log.error("没有这个方法：" + e.getMessage());
         return new R(StatusCode.EXCEPTION_NOT_METHOD, "小盆友别乱来哦，not method");
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public R runtimeException(RuntimeException e){
+        log.error("运行时异常：" + e.getMessage());
+
+        return R.error();
+    }
+
+
+
 
     /**
      * 其他全局异常在此捕获

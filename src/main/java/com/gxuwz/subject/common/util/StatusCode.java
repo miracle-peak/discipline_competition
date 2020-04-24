@@ -7,6 +7,9 @@ public interface StatusCode {
     int TOKEN_ERROR = 20001; // token 错误
     int TOKEN_NONE = 3333;  // 没有jwt
 
+    int JWT_EXPIRE = 13333; // jwt过期
+    int JWT_EXCEPTION = 5005; // jwt异常
+
     int VISIT_LIMIT = 11111; // 频繁访问
 
     int CONNECTION_ERROR = 40001; // 服务器连接失败，如redis连接失败
