@@ -5,6 +5,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.*;
@@ -14,6 +17,7 @@ import java.util.*;
  * date: 2020/3/25 11:27
  * @Version V1.0
  **/
+@Slf4j
 public class JWTUtil {
     // 秘钥
     private static final String SECRET = "tale_jwt";
@@ -36,6 +40,9 @@ public class JWTUtil {
         SecretKey key = getSecret();
 
         String jwt = Jwts.builder().setClaims(info)
+                .setIssuer(userName)
+                .setSubject("tale")
+                .setIssuedAt(new Date())
                 .setExpiration(expireTime)
                 .signWith(SignatureAlgorithm.HS256, key)
 //                .signWith(SignatureAlgorithm.HS256, SECRET)
@@ -62,7 +69,10 @@ public class JWTUtil {
         }catch (ExpiredJwtException e) {
             validate.setSuccess(false);
             validate.setErrCode(StatusCode.JWT_EXPIRE);
+            log.error("jwt过期:" + e.getMessage());
+
         }catch (Exception e){
+            log.error("jwt exec--->" + e.getMessage());
             validate.setSuccess(false);
             validate.setErrCode(StatusCode.JWT_EXCEPTION);
         }
@@ -78,8 +88,10 @@ public class JWTUtil {
      * @return
      */
     public static Claims parseJwt(String jwt){
+        SecretKey key = getSecret();
 
-        Claims claims = Jwts.parser().setSigningKey(SECRET)
+        Claims claims = Jwts.parser()
+                .setSigningKey(key)
                 .parseClaimsJws(jwt)
                 .getBody();
         return claims;

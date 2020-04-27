@@ -45,14 +45,14 @@ public class JedisUtil {
      */
     public String getToken(String key){
         try {
-            String reslut = (String)redisTemplate.opsForValue().get(key);
+            String result = (String)redisTemplate.opsForValue().get(key);
+//            redisTemplate.opsForValue().get(key).
 
-            return reslut;
+            return result;
         }catch (Exception e){
             e.printStackTrace();
             return null;
         }
-
     }
 
     /**
@@ -89,5 +89,17 @@ public class JedisUtil {
         }catch (Exception e){
             return false;
         }
+    }
+
+    /**
+     * 删除key
+     * @param key
+     * @return
+     */
+    public boolean deleteStr(String key){
+
+        Boolean delete = redisTemplate.opsForValue().getOperations().delete(key);
+
+        return delete;
     }
 }

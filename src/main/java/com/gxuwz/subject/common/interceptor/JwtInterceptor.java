@@ -1,10 +1,8 @@
 package com.gxuwz.subject.common.interceptor;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.gxuwz.subject.common.util.JWTUtil;
-import com.gxuwz.subject.common.util.JedisUtil;
-import com.gxuwz.subject.common.util.ResponseUtil;
-import com.gxuwz.subject.common.util.StatusCode;
+import com.gxuwz.subject.common.util.*;
+import com.gxuwz.subject.model.JwtValidate;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -31,13 +29,22 @@ public class JwtInterceptor implements HandlerInterceptor {
         if (! uri.contains("/user/login") && ! uri.contains("/file")){ // 不拦截登录请求
             String jwt = request.getHeader("Authorization");
 
-            System.out.println("jwt-->" + jwt);
-
             Map<String, Object> resp = new HashMap<>();
 
-            if (!StringUtils.isEmpty(jwt)){
+            if (! StringUtils.isEmpty(jwt)){
+                // 验证jwt
+                JwtValidate validate = JWTUtil.validateJwt(jwt);
+
+                if (! validate.isSuccess()){ // jwt验证不通过
+                    resp.put("message", "对不起！您的token 有误！validate result :token error");
+                    resp.put("code", validate.getErrCode());
+
+                    ResponseUtil.returnJson(response, resp);
+                    return false;
+                }
+
                 // 解密jwt
-                Claims claims = JWTUtil.parseJwt(jwt);
+                Claims claims = validate.getClaims();
 
                 if (claims.containsKey("id")){
 
