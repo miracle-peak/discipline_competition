@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.gxuwz.subject.common.util.StatusCode;
+import com.gxuwz.subject.common.constant.StatusCode;
 
 /**
  * 用于未被全局异常处理的错误 如：404

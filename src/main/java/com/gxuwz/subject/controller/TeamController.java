@@ -1,9 +1,7 @@
 package com.gxuwz.subject.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gxuwz.subject.common.util.R;
-import com.gxuwz.subject.common.util.VisitLimit;
+import com.gxuwz.subject.common.annotation.VisitLimit;
 import com.gxuwz.subject.model.TeamMemberModel;
 import com.gxuwz.subject.model.TeamModel;
 import com.gxuwz.subject.service.ITeamMemberService;

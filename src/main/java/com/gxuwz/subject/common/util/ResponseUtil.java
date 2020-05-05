@@ -24,11 +24,9 @@ public class ResponseUtil {
     public static void responseJson(HttpServletResponse response, int code, String msg) {
 
         OutputStream outputStream = null;
-//
-//        JSONObject object = new JSONObject();
 
-//        object.put("data", value);
-        String result = JSON.toJSONString(new R(code, msg));
+        String result = JSON.toJSONString(new R(code, msg)); // 或者使用JSONObject.toJSONString()
+
 
         try {
             response.setCharacterEncoding("utf-8");

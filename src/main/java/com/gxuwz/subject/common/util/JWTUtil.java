@@ -1,12 +1,12 @@
 package com.gxuwz.subject.common.util;
 
+import com.gxuwz.subject.common.constant.StatusCode;
 import com.gxuwz.subject.model.JwtValidate;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;

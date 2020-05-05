@@ -1,6 +1,7 @@
 package com.gxuwz.subject.common.util;
 
 //import io.swagger.annotations.ApiOperation;
+import com.gxuwz.subject.common.constant.StatusCode;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.HashMap;

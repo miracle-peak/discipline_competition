@@ -1,12 +1,12 @@
 package com.gxuwz.subject.common.interceptor;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.gxuwz.subject.common.constant.StatusCode;
 import com.gxuwz.subject.common.util.*;
 import com.gxuwz.subject.model.JwtValidate;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
 
-        if (! uri.contains("/user/login") && ! uri.contains("/file")){ // 不拦截登录请求
+        if (! uri.contains("/user/login") && ! uri.contains("/file") && ! uri.contains("/user/add")){ // 不拦截登录请求
             String jwt = request.getHeader("Authorization");
 
             Map<String, Object> resp = new HashMap<>();
@@ -51,7 +51,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                     String id = claims.get("id").toString();
 
                     String token = jedisUtil.getToken(id);
-                    System.out.println("token--->" + token);
+
                     if (! jwt.equals(token)){// jwt不一致
                         resp.put("message", "对不起！您的token 有误！token error");
                         resp.put("code", StatusCode.TOKEN_ERROR);
@@ -82,13 +82,4 @@ public class JwtInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
-    }
 }

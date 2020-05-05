@@ -7,6 +7,7 @@ import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import javax.validation.constraints.Pattern;
 
 /**
  * <p>
@@ -33,5 +34,7 @@ public class UserModel implements Serializable {
 
     private String password;
 
+//    @Pattern(regexp = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$", message = "邮箱格式不正确")
+    private String mail;
 
 }

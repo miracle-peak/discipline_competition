@@ -1,7 +1,7 @@
 package com.gxuwz.subject.common.exception;
 
 import com.gxuwz.subject.common.util.R;
-import com.gxuwz.subject.common.util.StatusCode;
+import com.gxuwz.subject.common.constant.StatusCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
     public R runtimeException(RuntimeException e){
         log.error("运行时异常：" + e.getMessage());
 
-        return R.error();
+        return R.error().message("runtime exception");
     }
 
 

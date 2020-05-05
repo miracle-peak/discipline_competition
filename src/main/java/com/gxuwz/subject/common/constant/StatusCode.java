@@ -1,4 +1,4 @@
-package com.gxuwz.subject.common.util;
+package com.gxuwz.subject.common.constant;
 
 public interface StatusCode {
 

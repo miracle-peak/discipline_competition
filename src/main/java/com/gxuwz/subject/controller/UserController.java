@@ -1,6 +1,10 @@
 package com.gxuwz.subject.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.gxuwz.subject.common.annotation.Log;
+import com.gxuwz.subject.common.annotation.VisitLimit;
+import com.gxuwz.subject.common.constant.StatusCode;
+import com.gxuwz.subject.common.rabbit.RabbitProducer;
 import com.gxuwz.subject.model.JwtValidate;
 import com.gxuwz.subject.model.TeacherModel;
 import com.gxuwz.subject.model.UserModel;
@@ -11,7 +15,6 @@ import com.gxuwz.subject.common.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Calendar;
 import java.util.Date;
 
@@ -36,8 +39,12 @@ public class UserController {
     @Autowired
     private JedisUtil jedistUtil;
 
+    @Autowired
+    private RabbitProducer rabbitProducer;
+
 //    @ApiOperation("登录")
     @RequestMapping("/login")
+    @Log
     @VisitLimit(limit = 3, rangeTime = 5, expire = 60)
     public R login(@RequestBody UserModel userModel){
         if (userModel == null){
@@ -117,12 +124,14 @@ public class UserController {
 
     }
 
+//    @ApiOperation("添加用户")
     @RequestMapping("/add")
     @ResponseBody
-//    @ApiOperation("添加用户")
+    @VisitLimit(limit = 3, rangeTime = 8, expire = 60)
     public R addUser(@RequestBody UserModel user){
+        System.out.println("user-->" + user.toString());
 
-        if (user.getPassword().equals("") || user.getPassword() == null) {
+        if (! "".equals(user.getPassword()) && user.getPassword() != null) {
 
             user.setPassword(MD5Util.saltEncryption(user.getPassword()));
 
@@ -131,6 +140,8 @@ public class UserController {
             boolean flag = userService.saveOrUpdate(user);
 
             if (flag) {
+                rabbitProducer.send(user);
+
                 return R.ok().message("添加用户成功");
             }
         }
