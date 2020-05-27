@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,6 +35,16 @@ public class ProjectApplyController {
     @Autowired
     private IProjectService projectService;
 
+    /**
+     * 项目立项分页查询
+     *
+     * @param status
+     * @param name
+     * @param limit
+     * @param page
+     * @param teacherId
+     * @return
+     */
     @GetMapping("/list")
     public R list(@RequestParam("status")String status, @RequestParam("name")String name,
                   @RequestParam("limit")Integer limit, @RequestParam("page")Integer page,
@@ -49,11 +61,12 @@ public class ProjectApplyController {
 
     /**
      * 项目立项申请
+     *
      * @param projectApplyModel
      * @return
      */
     @PostMapping("/save")
-    public R add(@RequestBody ProjectApplyModel projectApplyModel){
+    public R add(@RequestBody @Valid ProjectApplyModel projectApplyModel){
         boolean flag;
 
         flag = budgetService.save(projectApplyModel.getBudget());
@@ -87,6 +100,7 @@ public class ProjectApplyController {
      */
     @PostMapping("/update")
     public R update(@RequestBody ProjectApplyModel projectApplyModel){
+        System.out.println("params-->" + projectApplyModel.toString());
         boolean flag = service.updateById(projectApplyModel);
         if (! flag){
             return R.error();

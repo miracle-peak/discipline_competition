@@ -7,6 +7,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -21,6 +22,8 @@ import java.util.*;
 public class JWTUtil {
     // 秘钥
     private static final String SECRET = "tale_jwt";
+
+
 
     /**
      * 生成jwt
@@ -67,6 +70,7 @@ public class JWTUtil {
             validate.setSuccess(true);
             validate.setClaims(claims);
         }catch (ExpiredJwtException e) {
+
             validate.setSuccess(false);
             validate.setErrCode(StatusCode.JWT_EXPIRE);
             log.error("jwt过期:" + e.getMessage());
@@ -104,9 +108,9 @@ public class JWTUtil {
      */
     public static SecretKey getSecret(){
 
-        String encodeKey = MD5Util.saltEncryption(SECRET);
+//        String encodeKey = MD5Util.saltEncryption(SECRET);
 
-        SecretKey key = new SecretKeySpec(encodeKey.getBytes(), 0 , encodeKey.length(), "AES");
+        SecretKey key = new SecretKeySpec(SECRET.getBytes(), 0 , SECRET.length(), "AES");
 
         return key;
     }

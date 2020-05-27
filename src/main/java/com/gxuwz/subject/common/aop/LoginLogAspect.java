@@ -48,6 +48,7 @@ public class LoginLogAspect {
     /**
      *保存登录记录（登录日志）
      * 包含登录时间、用户名、ip、登录返回的msg、登录状态（是否登录成功）
+     *
      * @param joinPoint
      * @param result 切入点方法返回的对象
      */

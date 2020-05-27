@@ -9,6 +9,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
+
 /**
  * <p>
  * 
@@ -36,8 +39,10 @@ public class ProjectModel implements Serializable {
 
     private String teacherId;
 
+//    @Size(min = 11, max = 11)
     private String phone;
 
+    @Email(message = "邮箱格式不正确")
     private String mail;
 
     private String startDate;

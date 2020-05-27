@@ -18,5 +18,6 @@ public interface ITeamService extends IService<TeamModel> {
                             Integer current, Integer limit);
 
     Integer getTotal(String title, String teacherId);
+
     List<TeamModel> findByTeacher(String title, String teacherId);
 }

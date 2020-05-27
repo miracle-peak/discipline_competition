@@ -11,7 +11,7 @@ import org.springframework.util.DigestUtils;
 public class MD5Util {
 
     // 盐
-    private static final String salt = "tale_salt";
+    private static final String SALT = "tale_salt";
 
     /**
      * md5加密
@@ -30,7 +30,7 @@ public class MD5Util {
      * @return
      */
     public static String saltEncryption(String password) {
-        password = salt.charAt(2) + password + salt.charAt(3) + salt.charAt(1);
+        password = SALT.charAt(2) + password + SALT.charAt(3) + SALT.charAt(1);
 
         String str = md5(password);
 

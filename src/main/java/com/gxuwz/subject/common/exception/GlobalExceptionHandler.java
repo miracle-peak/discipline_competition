@@ -13,6 +13,8 @@ import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import redis.clients.jedis.exceptions.JedisConnectionException;
+import redis.clients.jedis.exceptions.JedisException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -70,12 +72,12 @@ public class GlobalExceptionHandler {
     public R handleException(Throwable e) {
         if (e instanceof JedisConnectionException) {
             //redis连接异常
-            return new R(ResultCode.CONNECTION_ERROR, "系统服务器连接失败！redis connect");
+            return new R(StatusCode.CONNECTION_ERROR, "系统服务器连接失败！redis connect");
         } else if (e instanceof JedisException) {
             //redis异常
-            return new R(ResultCode.REDIS_ERROR, "系统服务器异常请通知管理员！redis error");
+            return new R(StatusCode.REDIS_ERROR, "系统服务器异常请通知管理员！redis error");
         }
-        return new R(ResultCode.SYSTEM_ERROR, "系统错误！throwable");
+        return new R(StatusCode.SYSTEM_ERROR, "系统错误！throwable");
     }*/
 
 

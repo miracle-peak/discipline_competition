@@ -1,33 +1,23 @@
 package com.gxuwz.subject.controller;
 
 import com.gxuwz.subject.common.util.R;
+import com.gxuwz.subject.common.util.TokenUtil;
+import com.gxuwz.subject.service.IFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.ResourceUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import sun.misc.BASE64Decoder;
-
 import javax.activation.MimetypesFileTypeMap;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.Map;
 
 /**
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/4/2 14:49
  * @Version V1.0
  **/
@@ -39,8 +29,22 @@ public class UploadController {
 
     private static final String RELATIVE_PATH = "/src/main/resources/static/file/";
 
-    // Windows和linux下都可用的文件目录 /
+    /** Windows和linux下都可用的文件目录 */
     public static final String separator = File.separator;
+
+    @Autowired
+    private IFileService service;
+
+    /**
+     *  获取七牛云的token
+     * @return
+     */
+    @GetMapping("/getToken")
+    public R getToken(){
+
+        return R.ok().data("token", TokenUtil.getUploadToken());
+    }
+
 
     /**
      * 文件上传
@@ -49,8 +53,10 @@ public class UploadController {
      */
     @PostMapping("/upload")
     public R upload(@RequestBody Map<String, Object> params){
-        String base64Str = ""; // base64文件字符串
-        String name = "";  // 文件名称
+        // base64文件字符串
+        String base64Str = "";
+        // 文件名称
+        String name = "";
         if (params.containsKey("baseString")){
             base64Str = (String) params.get("baseString");
         }
@@ -61,8 +67,10 @@ public class UploadController {
         if (StringUtils.isEmpty(base64Str)){
             return R.error().message("文件为空");
         }
-        String imgFilePath = ""; // 文件路径
-        String fileName = System.currentTimeMillis() + "_" + name; // 文件名称
+        // 文件路径
+        String imgFilePath = "";
+        // 文件名称
+        String fileName = System.currentTimeMillis() + "_" + name;
 
         String sysPath = System.getProperty("user.dir");
         logger.info("sysPath--->" + sysPath);
@@ -70,14 +78,15 @@ public class UploadController {
         BASE64Decoder decoder = new BASE64Decoder();
 
         int indexOf = base64Str.indexOf(";");
-        base64Str = base64Str.substring(indexOf + 8); // 去掉文件类型取bas64字符串
+        // 去掉文件类型取bas64字符串
+        base64Str = base64Str.substring(indexOf + 8);
 
         try{
-            //Base64解码
+            // Base64解码
             byte[] b = decoder.decodeBuffer(base64Str);
             for(int i = 0; i < b.length; ++i){
                 if(b[i] < 0){
-                    //调整异常数据
+                    // 调整异常数据
                     b[i] += 256;
                 }
             }
@@ -87,7 +96,7 @@ public class UploadController {
             imgFilePath = imgFilePath.replaceAll( "\\\\", "/");
 
             File upload = new File(sysPath, RELATIVE_PATH);
-            if(!upload.exists()){
+            if(! upload.exists()){
                 upload.mkdirs();
             }
 

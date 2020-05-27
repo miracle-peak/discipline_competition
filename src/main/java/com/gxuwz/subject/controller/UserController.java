@@ -93,6 +93,8 @@ public class UserController {
 
                     // jwt过期
                     if (validate.getErrCode() == StatusCode.JWT_EXPIRE){
+                        System.out.println("登录--expire-->");
+                        jedistUtil.deleteStr(one.getId() + "");
                         // 创建jwt
                         token = JWTUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
 

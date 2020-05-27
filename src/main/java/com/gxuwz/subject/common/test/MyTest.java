@@ -3,6 +3,7 @@ package com.gxuwz.subject.common.test;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gxuwz.subject.common.util.MD5Util;
+import com.gxuwz.subject.common.util.TokenUtil;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.junit.Test;
 
@@ -33,15 +34,15 @@ public class MyTest {
 
     @Test
     public void md5(){
+        System.out.println("token-->" + TokenUtil.getUploadToken());
 
-        System.out.println(MD5Util.saltEncryption("123456"));
+//        System.out.println(MD5Util.saltEncryption("123456"));
 
     }
 
 
     @Test
     public void MyTest(){
-
         String result = "[{'channelID':'0ed3e782'},{'channelID':'112279d92e3aafbf'},]";
 
         JSONArray objects = JSONArray.parseArray(result);
