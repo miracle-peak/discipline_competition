@@ -4,7 +4,7 @@ import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 
 /**
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/5/6 14:12
  **/
 public class RedisExpiredListener implements MessageListener {

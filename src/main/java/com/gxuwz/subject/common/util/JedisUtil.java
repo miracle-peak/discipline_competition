@@ -8,9 +8,10 @@ import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
- * author: 蔡奇峰
- * date: 2020/3/25 11:28
+ * redis 工具
  *
+ * @author: 蔡奇峰
+ * @date: 2020/3/25 11:28
  * @Version V1.0
  **/
 @Component
@@ -22,16 +23,17 @@ public class JedisUtil {
 
     /**
      * 存储jwt
+     *
      * @param key
      * @param value
-     * @param expireTime
+     * @param expireTime 过期时间 单位秒
      */
     public boolean setToken(String key, Object value, long expireTime) {
         try {
             redisTemplate.opsForValue().set(key, value, expireTime, TimeUnit.SECONDS);
 
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("存储token失败:{}", e.getMessage());
             return false;
         }
 
@@ -40,13 +42,13 @@ public class JedisUtil {
 
     /**
      * 获取jwt
+     *
      * @param key
      * @return
      */
     public String getToken(String key){
         try {
             String result = (String)redisTemplate.opsForValue().get(key);
-//            redisTemplate.opsForValue().get(key).
 
             return result;
         }catch (Exception e){
@@ -56,7 +58,8 @@ public class JedisUtil {
     }
 
     /**
-     * get
+     * 取String值通用方法
+     *
      * @param key
      * @return
      */
@@ -87,18 +90,19 @@ public class JedisUtil {
 
             return true;
         }catch (Exception e){
+            logger.error("设置key失败:{}", e.getMessage());
             return false;
         }
     }
 
     /**
      * 删除key
+     *
      * @param key
      * @return
      */
     public boolean deleteStr(String key){
-
-        Boolean delete = redisTemplate.opsForValue().getOperations().delete(key);
+        boolean delete = redisTemplate.opsForValue().getOperations().delete(key);
 
         return delete;
     }

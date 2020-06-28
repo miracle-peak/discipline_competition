@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 /**
  * 消费者
  *
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/5/5 21:44
  **/
 @Slf4j

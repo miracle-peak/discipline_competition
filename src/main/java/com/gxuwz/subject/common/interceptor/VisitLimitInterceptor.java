@@ -14,7 +14,8 @@ import java.lang.reflect.Method;
 
 /**
  * 访问限制拦截器
- * author: 蔡奇峰
+ *
+ * @author: 蔡奇峰
  * date: 2020/4/3 17:21
  * @Version V1.0
  **/
@@ -50,7 +51,8 @@ public class VisitLimitInterceptor implements HandlerInterceptor {
             // ip + 请求的方法路径作为key
             String key = IpUtil.getIpAddress(request) + request.getRequestURI();
 
-            Integer currentVisit = null;// 当前访问次数
+            // 当前访问次数
+            Integer currentVisit = null;
             String value = jedisUtil.getStr(key);
 
             if (value != null && ! "".equals(value)){

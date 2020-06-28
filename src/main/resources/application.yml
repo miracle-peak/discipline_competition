@@ -1,8 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://47.52.72.145:3389/competition_subject?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&tinyInt1isBit=false
+    url: jdbc:mysql://miraclepeak.xyz:3389/competition_subject?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&tinyInt1isBit=false
     username: ENC(GNTGqKTs2Iu5LCeKJMXiYQ==)
-    password: ENC(APtQIanTvhhFZ45wafbNnw==)
+    password: ENC(BS8Z50ImQg3pd0yYonKB5Q==)
+#    password: ENC(APtQIanTvhhFZ45wafbNnw==)
     driver-class-name: com.mysql.jdbc.Driver
 
   # 静态文件
@@ -15,10 +16,10 @@ spring:
 
   # redis配置
   redis:
-    port: 6388
+    port: 6399
     password: ENC(qQP6p0t7OegwIl5Ue1mkVg==)
     database: 1
-    host: 47.52.72.145
+    host: 120.26.184.5
     jedis:
       pool:
         max-active: 8 # 连接池最大连接数（使用负值表示没有限制）
@@ -49,8 +50,8 @@ spring:
 
   ## QQ邮箱配置
   mail:
-    host: smtp.qq.com #发送邮件服务器
-    username: 1748672727@qq.com #发送邮件的邮箱地址
+    host: smtp.qq.com # 发送邮件服务器
+    username: 1748672727@qq.com # 发送邮件的邮箱地址
     password: ENC(bJc+7aozRKxhZplatBFOColD3ZIH5SgBfjM0cAXEOSs=) #客户端授权码，不是邮箱密码，这个在qq邮箱设置里面自动生成的
     #    properties.mail.smtp.port: 465 #端口号465或587
     from: 1748672727@qq.com # 发送邮件的地址，和上面username一致

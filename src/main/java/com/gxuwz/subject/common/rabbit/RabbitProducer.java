@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 /**
  * 生产者
  *
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/5/5 21:39
  **/
 @Component

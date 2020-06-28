@@ -7,14 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 /**
  * 邮件工具
  *
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/5/5 21:50
  **/
 @Slf4j
@@ -47,17 +46,17 @@ public class MailUtil {
         MimeMessageHelper messageHelper;
         try {
             messageHelper = new MimeMessageHelper(message, true);
-            //邮件发送人
+            // 邮件发送人
             messageHelper.setFrom(from);
-            //邮件接收人
+            // 邮件接收人
             messageHelper.setTo(to);
-            //邮件主题
+            // 邮件主题
             message.setSubject(subject);
-            //邮件内容，html格式
+            // 邮件内容，html格式
             messageHelper.setText(content, true);
-            //发送
+            // 发送
             mailSender.send(message);
-            //日志信息
+            // 日志信息
             log.info("邮件已经发送 ^_^ ~_~ ");
         } catch (MessagingException e) {
             log.error("发送邮件时发生异常！", e);
@@ -65,8 +64,6 @@ public class MailUtil {
         }
 
         return true;
-
     }
-
 
 }

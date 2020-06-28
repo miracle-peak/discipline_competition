@@ -6,8 +6,10 @@ import com.gxuwz.subject.common.util.MD5Util;
 import com.gxuwz.subject.common.util.TokenUtil;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.junit.Test;
+import org.springframework.util.Base64Utils;
 
 import java.util.ArrayList;
+import java.util.Base64;
 
 /**
  * author: 蔡奇峰
@@ -26,7 +28,7 @@ public class MyTest {
         textEncryptor.setPassword("tale666cqf88miracle6TALE_CQF");
         //要加密的数据（数据库的用户名或密码）
         String username = textEncryptor.encrypt("");
-        String password = textEncryptor.encrypt("");
+        String password = textEncryptor.encrypt("123456");
         System.out.println("username:" + username);
         System.out.println("password:" + password);
 
@@ -34,7 +36,18 @@ public class MyTest {
 
     @Test
     public void md5(){
-        System.out.println("token-->" + TokenUtil.getUploadToken());
+        String token = TokenUtil.getUploadToken();
+        System.out.println("token-->" + token);
+        String substring = token.substring(token.lastIndexOf(":") + 1);
+        System.out.println("sub-->" + substring);
+
+        byte[] decode = Base64Utils.decode(substring.getBytes());
+
+        System.out.println("----");
+
+        String s = new String(decode);
+
+        System.out.println("s-->" + s);
 
 //        System.out.println(MD5Util.saltEncryption("123456"));
 

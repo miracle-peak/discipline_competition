@@ -25,7 +25,12 @@ public class SubjectApplication extends SpringBootServletInitializer {
 
     }
 
-    // 配置逻辑删除注入的Bean
+
+    /**
+     * 配置逻辑删除注入的Bean
+     *
+     * @return
+     */
     @Bean
     public ISqlInjector sqlInjector() {
         return new LogicSqlInjector();

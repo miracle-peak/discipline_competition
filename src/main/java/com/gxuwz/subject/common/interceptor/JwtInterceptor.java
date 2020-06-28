@@ -5,19 +5,45 @@ import com.gxuwz.subject.common.constant.StatusCode;
 import com.gxuwz.subject.common.util.*;
 import com.gxuwz.subject.model.JwtValidate;
 import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * author: 蔡奇峰
- * date: 2020/3/25 13:28
+ * jwt拦截验证
+ *
+ * @author: 蔡奇峰
+ * @date: 2020/3/25 13:28
  * @Version V1.0
  **/
+@Slf4j
 public class JwtInterceptor implements HandlerInterceptor {
+
+    /**
+     * 登录url
+     */
+    private static final String LOGIN_URL = "/user/login";
+    /**
+     * 访问静态文件url
+     */
+    private static final String FILE_URL = "/file";
+    /**
+     * 注册url
+     */
+    private static final String REGISTER_URL = "/user/add";
+    /**
+     * 健康监控url
+     */
+    private static final String ACTUATOR_URL = "/actuator";
+    /**
+     * jwt解密后claims的唯一标识
+     */
+    private static final String JWT_ID = "id";
 
     @Autowired
     private JedisUtil jedisUtil;
@@ -26,16 +52,18 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
 
-        if (! uri.contains("/user/login") && ! uri.contains("/file") && ! uri.contains("/user/add")){ // 不拦截登录请求
+        // 不拦截登录请求
+        if (! uri.contains(LOGIN_URL) || ! uri.contains(FILE_URL) || ! uri.contains(REGISTER_URL) || ! uri.contains(ACTUATOR_URL)) {
             String jwt = request.getHeader("Authorization");
 
-            Map<String, Object> resp = new HashMap<>();
+            Map<String, Object> resp = new HashMap<>(6);
 
-            if (! StringUtils.isEmpty(jwt)){
+            if (!StringUtils.isEmpty(jwt)) {
                 // 验证jwt
                 JwtValidate validate = JWTUtil.validateJwt(jwt);
 
-                if (! validate.isSuccess()){ // jwt验证不通过
+                // jwt验证不通过
+                if (!validate.isSuccess()) {
                     resp.put("message", "对不起！您的token 有误！validate result :token error");
                     resp.put("code", validate.getErrCode());
 
@@ -46,13 +74,14 @@ public class JwtInterceptor implements HandlerInterceptor {
                 // 解密jwt
                 Claims claims = validate.getClaims();
 
-                if (claims.containsKey("id")){
+                if (claims.containsKey(JWT_ID)) {
 
-                    String id = claims.get("id").toString();
+                    String id = claims.get(JWT_ID).toString();
 
                     String token = jedisUtil.getToken(id);
 
-                    if (! jwt.equals(token)){// jwt不一致
+                    // jwt不一致
+                    if (!jwt.equals(token)) {
                         resp.put("message", "对不起！您的token 有误！token error");
                         resp.put("code", StatusCode.TOKEN_ERROR);
 
@@ -60,16 +89,17 @@ public class JwtInterceptor implements HandlerInterceptor {
 
                         return false;
                     }
-
-                }else {// 可能是伪造的jwt
+                    // 可能是伪造的jwt
+                } else {
+                    log.error("可能存在伪造token，无 id key");
                     resp.put("message", "对不起！您的token 有误！token error");
                     resp.put("code", StatusCode.TOKEN_ERROR);
 
                     ResponseUtil.returnJson(response, resp);
                     return false;
                 }
-
-            }else {// 被拦截时也给出响应
+                // 被拦截时也给出响应
+            } else {
                 resp.put("message", "对不起！您木有权限！请尝试登录");
                 resp.put("code", StatusCode.TOKEN_NONE);
 

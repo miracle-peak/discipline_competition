@@ -8,21 +8,22 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * author: 蔡奇峰
- * date: 2020/3/25 14:54
- * @Version V1.0
  * 注册拦截器
+ *
+ * @version V1.0
+ * @author: 蔡奇峰
+ * date: 2020/3/25 14:54
  **/
 @Configuration
 public class MyConfigurer implements WebMvcConfigurer {
 
     @Bean
-    public JwtInterceptor getInterceptor(){
+    public JwtInterceptor getInterceptor() {
         return new JwtInterceptor();
     }
 
     @Bean
-    public VisitLimitInterceptor getVisitList(){
+    public VisitLimitInterceptor getVisitList() {
         return new VisitLimitInterceptor();
     }
 
@@ -30,13 +31,13 @@ public class MyConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        registry.addInterceptor(getInterceptor()).excludePathPatterns("/login")
+        registry.addInterceptor(getInterceptor()).excludePathPatterns("/user/login")
                 // 允许访问文件
                 .excludePathPatterns("/file/**")
                 // 允许访问swagger
                 .excludePathPatterns("/swagger-ui.html")
                 .excludePathPatterns("/webjars/**")
-        .addPathPatterns("/**");
+                .addPathPatterns("/**");
 
         registry.addInterceptor(getVisitList())
                 .addPathPatterns("/**");

@@ -30,14 +30,19 @@ public class LoginLogAspect {
     @Autowired
     private ILoginLogService logService;
 
-
     ThreadLocal<Long> startTime = new ThreadLocal<>();
 
-    @Pointcut("execution(public * com.gxuwz.subject.*Controller.login(..))")//断点位置
+    /**
+     * 切入点位置
+     */
+    @Pointcut("execution(public * com.gxuwz.subject.*Controller.login(..))")
     public void loginWebLog() {
     }
 
-    @Pointcut("execution(public * com.gxuwz.subject.service.*Services.*(..))")//断点位置
+    /**
+     * 切入点位置
+     */
+    @Pointcut("execution(public * com.gxuwz.subject.service.*Services.*(..))")
     public void operateWebLog() {
     }
 
@@ -71,7 +76,7 @@ public class LoginLogAspect {
 //        //获取切入点所在的方法
 //        Method method = signature.getMethod();
 
-        //请求的参数
+        // 请求的参数
         Object[] args = joinPoint.getArgs();
 
         UserModel userModel = null;
@@ -83,17 +88,18 @@ public class LoginLogAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest();
 
-        //获取用户ip地址
+        // 获取用户ip地址
         String ip = IpUtil.getIpAddress(request);
 
-        logModel.setIp(ip);
 
         String status = isSuccess ? "0" : "1";
-        logModel.setStatus(status);
-        logModel.setMsg(msg);
-
         LocalDateTime time = LocalDateTime.now();
-        logModel.setLoginTime(time + "");
+
+        // 使用@Builder注解
+        logModel.setIp(ip)
+                .setMsg(msg)
+                .setStatus(status)
+                .setLoginTime(time + "");
 
         log.info("log-->", logModel.toString());
 

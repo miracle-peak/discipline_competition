@@ -27,6 +27,16 @@ import java.util.Map;
 public class UploadController {
     Logger logger = LoggerFactory.getLogger(UploadController.class);
 
+    /**
+     * 上传文件放在static下需要重新启动系统才可以访问到资源，
+     * 因为静态资源打包后放在jar中，
+     *
+     * 解决方法：
+     * 1.配置虚拟文件路径的映射
+     * file:E:\\blog-2020\\src\\main\\resources\\static\\images\\
+     * 2.LiveReload ，实现静态文件的热部署，缺点：需要浏览器安装插件
+     * 3.热部署，缺点：不能立即查看，项目重启刷新需要时间
+     */
     private static final String RELATIVE_PATH = "/src/main/resources/static/file/";
 
     /** Windows和linux下都可用的文件目录 */
@@ -35,14 +45,18 @@ public class UploadController {
     @Autowired
     private IFileService service;
 
+    @Autowired
+    private TokenUtil tokenUtil;
+
     /**
      *  获取七牛云的token
+     *
      * @return
      */
     @GetMapping("/getToken")
     public R getToken(){
 
-        return R.ok().data("token", TokenUtil.getUploadToken());
+        return R.ok().data("token", tokenUtil.getRedisToken());
     }
 
 
@@ -115,13 +129,18 @@ public class UploadController {
 
     /**
      * 下载文件
+     * 这种下载文件在项目目录的方式只能在本地使用，不能在线上部署使用。
+     * 因为采用jar包/war包部署时，是不能把文件下载进war包/jar包内
+     *
      * @param
      * @return
      */
     @PostMapping("/download")
     public void download(HttpServletResponse response, @RequestBody Map<String, Object> param) throws Exception {
-        String fileName = (String) param.get("fileName"); // 文件全名
-        String name = fileName.substring(fileName.indexOf("_") + 1); // 文件名
+        // 文件全名
+        String fileName = (String) param.get("fileName");
+        // 文件名
+        String name = fileName.substring(fileName.indexOf("_") + 1);
 
         log.info("fileName-->" + fileName);
 
@@ -164,141 +183,6 @@ public class UploadController {
                 }
             }
         }
-
-
-        /*ResponseEntity<InputStreamResource> response = null;
-        try {
-
-            ClassPathResource classPathResource = new ClassPathResource(filePath);
-            InputStream inputStream = classPathResource.getInputStream();
-
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-            headers.add("Content-Disposition",
-                    "attachment; filename="
-                            + new String(name.getBytes("gbk"), "iso8859-1") + ".pdf");
-            headers.add("Pragma", "no-cache");
-            headers.add("Expires", "0");
-            response = ResponseEntity.ok().headers(headers)
-                    .contentType(MediaType.parseMediaType("application/octet-stream"))
-                    .body(new InputStreamResource(inputStream));
-        } catch (FileNotFoundException e1) {
-            log.error("找不到指定的文件", e1);
-        } catch (IOException e) {
-            log.error("获取不到文件流", e);
-        }
-        return response;*/
-
-
-
-
-
-
-        /*File file = new File(realPath, fileName);
-        if (file.exists()) {
-
-            response.setHeader("content-type", "application/octet-stream");
-            response.setContentType("application/octet-stream");
-            // 下载文件能正常显示中文
-            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
-
-            // 实现文件下载
-            byte[] buffer = new byte[1024];
-            FileInputStream fis = null;
-            BufferedInputStream bis = null;
-            try {
-                fis = new FileInputStream(file);
-                bis = new BufferedInputStream(fis);
-                OutputStream os = response.getOutputStream();
-                int i = bis.read(buffer);
-                while (i != -1) {
-                    os.write(buffer, 0, i);
-                    i = bis.read(buffer);
-                }
-                os.flush();
-                System.out.println("Download the song successfully!");
-            } catch (Exception e) {
-                System.out.println("Download the song failed!");
-            } finally {
-                if (bis != null) {
-                    bis.close();
-                }
-                if (fis != null) {
-                    fis.close();
-                }
-            }
-        }*/
-
-
-        // 发送给客户端的数据
-        /*OutputStream outputStream = response.getOutputStream();
-        byte[] buff = new byte[1024];
-        BufferedInputStream bis = null;
-        // 读取filename
-        bis = new BufferedInputStream(new FileInputStream(new File(filePath)));
-        int i = bis.read(buff);
-        while (i != -1) {
-            outputStream.write(buff, 0, buff.length);
-            outputStream.flush();
-            i = bis.read(buff);
-        }*/
-
-
-
-        /*InputStream f= this.getClass().getResourceAsStream("/static/file/" + fileName);
-
-        response.reset();
-        response.setContentType("application/x-msdownload;charset=utf-8");
-
-        String name = fileName.substring(fileName.indexOf("_") + 1);
-
-        try {
-            response.setHeader("Content-Disposition", "attachment;filename="+ new String((name).getBytes("gbk"), "iso-8859-1"));//下载文件的名称
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        ServletOutputStream out = null;
-        try {
-            out = response.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        BufferedInputStream bis = null;
-        BufferedOutputStream bos = null;
-        try {
-            bis = new BufferedInputStream(f);
-            bos = new BufferedOutputStream(out);
-            byte[] buff = new byte[2048];
-            int bytesRead;
-            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
-                bos.write(buff, 0, bytesRead);
-            }
-            bos.flush();
-            bos.close();
-            bis.close();
-        } catch (final IOException e) {
-            try {
-                throw e;
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        } finally {
-            if (bis != null){
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (bos != null){
-                try {
-                    bos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }*/
 
     }
 

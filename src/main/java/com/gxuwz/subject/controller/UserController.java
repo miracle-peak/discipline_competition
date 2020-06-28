@@ -14,6 +14,7 @@ import com.gxuwz.subject.common.util.*;
 //import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,11 +44,11 @@ public class UserController {
     private RabbitProducer rabbitProducer;
 
 //    @ApiOperation("登录")
-    @RequestMapping("/login")
+    @PostMapping("/login")
     @Log
     @VisitLimit(limit = 3, rangeTime = 5, expire = 60)
     public R login(@RequestBody UserModel userModel){
-        if (userModel == null){
+        if (StringUtils.isEmpty(userModel)){
             return R.error().message("啥也没有");
         }
         String userName = userModel.getUserName();
@@ -74,22 +75,28 @@ public class UserController {
 
             // 保证redis和jwt设置过期时间相同
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.HOUR, 24 * 6); // 设置过期时间
-            Date expireTime = calendar.getTime(); // 过期时间
-            long time = expireTime.getTime(); // 获取过期时间的时间戳
+            // 设置过期时间
+            calendar.add(Calendar.HOUR, 24 * 6);
+            // 过期时间
+            Date expireTime = calendar.getTime();
+            // 获取过期时间的时间戳
+            long time = expireTime.getTime();
 
-            if (token == null || "".equals(token)) {// 不存在这个token
+            // 不存在这个token
+            if (token == null || "".equals(token)) {
                 // 创建jwt
                 token = JWTUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
 
                 // 把jwt存到redis
-                flag = jedistUtil.setToken(one.getId() + "", token, time); // 存jwt到redis过期时间7天
+                // 存jwt到redis过期时间6天
+                flag = jedistUtil.setToken(one.getId() + "", token, time);
             }else{// 存在jwt（token）
 
                 // 验证jwt
                 JwtValidate validate = JWTUtil.validateJwt(token);
 
-                if (! validate.isSuccess()){// 验证不通过
+                // 验证不通过
+                if (! validate.isSuccess()){
 
                     // jwt过期
                     if (validate.getErrCode() == StatusCode.JWT_EXPIRE){
@@ -99,7 +106,8 @@ public class UserController {
                         token = JWTUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
 
                         // 把jwt存到redis
-                        flag = jedistUtil.setToken(one.getId() + "", token, time); // 存jwt到redis过期时间7天
+                        // 存jwt到redis过期时间6天
+                        flag = jedistUtil.setToken(one.getId() + "", token, time);
                     }
                     // TODO 其他错误未处理
                 }
@@ -122,16 +130,20 @@ public class UserController {
             }
 
         }
-        return R.error().message("密码错误");
+        return R.error().message("用户名或密码错误");
 
     }
 
 //    @ApiOperation("添加用户")
-    @RequestMapping("/add")
+    @PostMapping("/add")
     @ResponseBody
     @VisitLimit(limit = 3, rangeTime = 8, expire = 60)
     public R addUser(@RequestBody UserModel user){
         System.out.println("user-->" + user.toString());
+        if (StringUtils.isEmpty(user)) {
+
+            return R.error().message("请输入注册信息！");
+        }
 
         if (! "".equals(user.getPassword()) && user.getPassword() != null) {
 

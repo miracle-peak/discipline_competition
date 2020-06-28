@@ -5,24 +5,19 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gxuwz.subject.common.redis.KeyExpiredListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import java.time.Duration;
-import static java.util.Collections.singletonMap;
+
 
 /**
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/5/6 13:50
  **/
 @Configuration
@@ -37,27 +32,27 @@ public class RedisConfiguration {
      *
      * @return
      */
-    @Bean
+    /*@Bean
     CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
 
-        /* 默认配置， 默认超时时间为30s */
+        *//* 默认配置， 默认超时时间为30s *//*
         RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration
                 .ofSeconds(30L)).disableCachingNullValues();
 
-        /* 配置test的超时时间为120s*/
+        *//* 配置test的超时时间为120s*//*
         RedisCacheManager cacheManager = RedisCacheManager.builder(RedisCacheWriter.lockingRedisCacheWriter
                 (connectionFactory)).cacheDefaults(defaultCacheConfig).withInitialCacheConfigurations(singletonMap
                 ("test", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofSeconds(120L))
                         .disableCachingNullValues())).transactionAware().build();
 
         return cacheManager;
-    }
+    }*/
     /**
-     * retemplate相关配置
+     * redisTemplate相关配置
      *
+     * 以下两种redisTemplate自由根据场景选择
      * @return
      */
-    // 以下两种redisTemplate自由根据场景选择
     @Bean
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
@@ -80,14 +75,13 @@ public class RedisConfiguration {
         template.afterPropertiesSet();
         return template;
     }
+
     @Bean
     public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory factory) {
         StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
         stringRedisTemplate.setConnectionFactory(factory);
         return stringRedisTemplate;
     }
-
-
 
     /**
      * redis key 过期监听

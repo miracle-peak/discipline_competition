@@ -9,11 +9,15 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.util.StringUtils;
 
 /**
- * author: 蔡奇峰
+ * 监听过期的 redis key 并删除
+ *
+ * @author: 蔡奇峰
  * date: 2020/5/6 13:51
  **/
 @Slf4j
 public class KeyExpiredListener extends KeyExpirationEventMessageListener {
+
+//    private static final Logger log = LoggerFactory.getLogger(KeyExpiredListener.class);
 
     @Autowired
     private JedisUtil jedisUtil;
@@ -48,10 +52,13 @@ public class KeyExpiredListener extends KeyExpirationEventMessageListener {
 
         String expireKey = message.toString();
 
-        log.error("redis key 过期：", expireKey);
+        System.out.println("redis key 过期：" + expireKey);
 
-        if (StringUtils.isEmpty(expireKey)){
+        log.error("redis key 过期：{}", expireKey);
+
+        if (! StringUtils.isEmpty(expireKey)){
             jedisUtil.deleteStr(expireKey);
+            log.info("删除过期的redis key：{}", expireKey);
         }
 
     }
