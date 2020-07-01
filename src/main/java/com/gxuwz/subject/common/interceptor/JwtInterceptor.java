@@ -60,7 +60,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
             if (!StringUtils.isEmpty(jwt)) {
                 // 验证jwt
-                JwtValidate validate = JWTUtil.validateJwt(jwt);
+                JwtValidate validate = JwtUtil.validateJwt(jwt);
 
                 // jwt验证不通过
                 if (!validate.isSuccess()) {

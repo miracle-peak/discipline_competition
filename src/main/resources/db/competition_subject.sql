@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 28/06/2020 20:34:08
+ Date: 29/06/2020 11:42:01
 */
 
 SET NAMES utf8mb4;
@@ -43,7 +43,7 @@ CREATE TABLE `project_apply`  (
   `budget_id` int(16) NULL DEFAULT NULL COMMENT '经费预算id',
   `delete_flag` int(2) NOT NULL DEFAULT 0 COMMENT '删除标识(默认0 删除 1)',
   `opinion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '审核意见',
-  `status` varchar(6) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '审核状态',
+  `status` varchar(6) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '审核状态(0待提交 1待审核 2 不通过 3已通过) ',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `FK8x54h07ohu0jiedgvjmh2kg7o`(`budget_id`) USING BTREE,
   CONSTRAINT `project_apply_ibfk_1` FOREIGN KEY (`budget_id`) REFERENCES `sys_budget` (`budget_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
@@ -137,13 +137,13 @@ INSERT INTO `sys_capital` VALUES (19, 200, 1, 1, 1000, 1, 1111, 1, 1, 1, 2318);
 DROP TABLE IF EXISTS `sys_conclusion`;
 CREATE TABLE `sys_conclusion`  (
   `conclusion_id` int(16) NOT NULL AUTO_INCREMENT COMMENT '结题id',
-  `apply_id` int(16) NOT NULL,
+  `apply_id` int(16) NOT NULL COMMENT '项目立项申请id',
   `prize_id` int(16) NOT NULL COMMENT '获奖id',
   `capital_id` int(16) NOT NULL COMMENT '实际资金id',
   `delete_flag` int(2) NOT NULL DEFAULT 0 COMMENT '删除标识(默认0 删除 1)',
-  `teacher_id` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `teacher_id` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '指导老师',
   `team_no` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '团队编号',
-  `status` varchar(6) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '结题状态',
+  `status` varchar(6) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '结题状态(0待提交 1待审核 2 不通过 3已通过) ',
   `file` varchar(118) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '结题报告书',
   `opinion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '结题审核意见',
   PRIMARY KEY (`conclusion_id`) USING BTREE,

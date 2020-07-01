@@ -20,12 +20,12 @@ public class TokenUtil {
     private static final String SK = "uqnhNRotTsyjCsvEwOCVc4SZkvehLqn1tee0lWrT";
 
     /** 七牛云工作空间*/
-    private static final String BUCKET = "miraclepeak";
+    public static final String BUCKET = "miraclepeak";
 
     /**
      * 存七牛云token的redis key
      */
-    private static final String KEY = "qiniukey";
+    public static final String KEY = "qiniukey";
     private static final String DEADLINE = "deadline";
 
     @Autowired
@@ -46,9 +46,10 @@ public class TokenUtil {
 
             return token;
         }else {
-            Auth auth = Auth.create(AK, SK);
+//            Auth auth = Auth.create(AK, SK);
+//            String token = auth.uploadToken(BUCKET);
 
-            String token = auth.uploadToken(BUCKET);
+            String token = getUploadToken();
             // 过期时间一个小时
             redisTemplate.opsForValue().set(KEY, token, 1, TimeUnit.HOURS);
 

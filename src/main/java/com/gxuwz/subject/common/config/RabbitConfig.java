@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * RabbitMQ配置
  *
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/5/5 21:29
  **/
 @Slf4j

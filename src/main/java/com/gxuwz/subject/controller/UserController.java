@@ -85,7 +85,7 @@ public class UserController {
             // 不存在这个token
             if (token == null || "".equals(token)) {
                 // 创建jwt
-                token = JWTUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
+                token = JwtUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
 
                 // 把jwt存到redis
                 // 存jwt到redis过期时间6天
@@ -93,7 +93,7 @@ public class UserController {
             }else{// 存在jwt（token）
 
                 // 验证jwt
-                JwtValidate validate = JWTUtil.validateJwt(token);
+                JwtValidate validate = JwtUtil.validateJwt(token);
 
                 // 验证不通过
                 if (! validate.isSuccess()){
@@ -103,7 +103,7 @@ public class UserController {
                         System.out.println("登录--expire-->");
                         jedistUtil.deleteStr(one.getId() + "");
                         // 创建jwt
-                        token = JWTUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
+                        token = JwtUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
 
                         // 把jwt存到redis
                         // 存jwt到redis过期时间6天
