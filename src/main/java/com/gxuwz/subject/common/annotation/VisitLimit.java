@@ -4,7 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * 设置访问限制注解
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/4/3 17:32
  * @Version V1.0
  **/

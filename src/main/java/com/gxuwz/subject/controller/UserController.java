@@ -48,15 +48,15 @@ public class UserController {
     @Log
     @VisitLimit(limit = 3, rangeTime = 5, expire = 60)
     public R login(@RequestBody UserModel userModel){
-        if (StringUtils.isEmpty(userModel)){
+        if (ObjectUtils.isEmpty(userModel)){
             return R.error().message("啥也没有");
         }
         String userName = userModel.getUserName();
         String password = userModel.getPassword();
 
-        if(userName.equals("") || userName == null){
+        if(StringUtils.isEmpty(userName)){
             return R.error().message("请输入用户名");
-        }else if (password.equals("") || password == null){
+        }else if (StringUtils.isEmpty(password)){
             return R.error().message("请输入密码");
         }
 
@@ -97,7 +97,6 @@ public class UserController {
 
                 // 验证不通过
                 if (! validate.isSuccess()){
-
                     // jwt过期
                     if (validate.getErrCode() == StatusCode.JWT_EXPIRE){
                         System.out.println("登录--expire-->");
@@ -116,7 +115,7 @@ public class UserController {
 
             if (flag){
                 // 如果是教师则返回教师工号
-                if (one.getUtype().equals("3")){
+                if ("3".equals(one.getUtype())){
                     QueryWrapper queryWrapper = new QueryWrapper();
                     queryWrapper.eq("account_num", one.getUserName());
                     TeacherModel teacherModel = teacherService.getOne(queryWrapper);

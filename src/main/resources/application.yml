@@ -113,7 +113,7 @@ jasypt:
 #      suffix: "]"
 
 
-# 监控服务
+# 监控服务 不指定context则默认/actuator
 management:
   server:
     port: 1688

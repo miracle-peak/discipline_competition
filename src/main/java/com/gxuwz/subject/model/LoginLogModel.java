@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/5/1 14:04
  **/
 @Data
