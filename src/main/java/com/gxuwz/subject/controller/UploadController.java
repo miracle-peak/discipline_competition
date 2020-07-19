@@ -29,7 +29,10 @@ public class UploadController {
 
     /**
      * 上传文件放在static下需要重新启动系统才可以访问到资源，
-     * 因为静态资源打包后放在jar中，
+     * 因为静态资源打包后放在jar中。
+     * TODO 文件放在static的方法只适用于本地，部署到服务器则失效。
+     * TODO 因为打包后jar/war包获取到项目的路径是虚拟的。
+     * TODO 而且也不可能将文件下到jar/war包中。
      *
      * 解决方法：
      * 1.配置虚拟文件路径的映射
@@ -58,7 +61,6 @@ public class UploadController {
 
         return R.ok().data("token", tokenUtil.getRedisToken());
     }
-
 
     /**
      * 文件上传
