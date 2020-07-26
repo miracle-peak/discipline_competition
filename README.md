@@ -37,8 +37,12 @@
 #### 软件架构
 软件架构说明
 前后端分离
-后台：springboot + mybatis + redis + RabbitMq + jwt + mysql
-[前端(https://gitee.com/tale_14/subject_vue)：vue + axios + element-ui
+
+
+1.后台：springboot + mybatis + redis + RabbitMq + jwt + mysql
+2. 前端(https://gitee.com/tale_14/subject_vue)：vue + axios + element-ui
+
+
 
 #### 安装教程
 
