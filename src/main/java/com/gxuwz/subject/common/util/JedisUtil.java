@@ -3,6 +3,7 @@ package com.gxuwz.subject.common.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
@@ -19,7 +20,24 @@ public class JedisUtil {
     Logger logger = LoggerFactory.getLogger(JedisUtil.class);
 
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate redisTemplate;
+
+
+    /**
+     * 缓存基本的对象，Integer、String、实体类等
+     *
+     * @param key 缓存的键值
+     * @param value 缓存的值
+     * @param timeout 时间
+     * @param timeUnit 时间颗粒度
+     * @return 缓存的对象
+     */
+    public <T> ValueOperations<String, T> setCacheObject(String key, T value, Integer timeout, TimeUnit timeUnit)
+    {
+        ValueOperations<String, T> operation = redisTemplate.opsForValue();
+        operation.set(key, value, timeout, timeUnit);
+        return operation;
+    }
 
     /**
      * 存储jwt

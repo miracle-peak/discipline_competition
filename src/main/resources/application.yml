@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://miraclepeak.xyz:3389/competition_subject?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&tinyInt1isBit=false
+    url: jdbc:mysql://127.0.0.1:3306/competition_subject?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&tinyInt1isBit=false
     username: ENC(GNTGqKTs2Iu5LCeKJMXiYQ==)
     password: ENC(BS8Z50ImQg3pd0yYonKB5Q==)
 #    password: ENC(APtQIanTvhhFZ45wafbNnw==)
@@ -16,10 +16,10 @@ spring:
 
   # redis配置
   redis:
-    port: 6399
+    port: 6379
     password: ENC(qQP6p0t7OegwIl5Ue1mkVg==)
     database: 1
-    host: 120.26.184.5
+    host: 127.0.0.1
     jedis:
       pool:
         max-active: 8 # 连接池最大连接数（使用负值表示没有限制）
@@ -36,13 +36,17 @@ spring:
     port: 5670
     virtual-host: ENC(EUvYvdnpOx8+AIk+rtSkmQ==)
     connection-timeout: 60000ms
-    # 支持发布确认
+    # 支持发布确认（开启confirms模式，保证消息可靠性）
     publisher-confirms: true
     # 支持发布返回
     publisher-returns: true
     # 开启ACK
     listener:
       direct:
+        # 修改确认机制为手动确认，默认为：AUTO：自动确认，auto易导致消息丢失
+        # 如： 刚消费到，还没处理，结果进程挂了，比如重启了，那么就尴尬了，
+        # RabbitMQ 认为你已经消费了，这数据就丢了。
+        # 手动时： 当处理完毕才，才 ack。保证消息的可靠传递还可以开启 RabbitMQ 的持久化
         acknowledge-mode: manual
       simple:
         acknowledge-mode: manual
@@ -125,7 +129,7 @@ management:
 info:
   app:
     name: tale_监控
-    url: https://www.jianshu.com/u/7f093d6ed255
+    url: 博客地址：https://www.jianshu.com/u/7f093d6ed255
     email: ihopyou@qq.com
 
 

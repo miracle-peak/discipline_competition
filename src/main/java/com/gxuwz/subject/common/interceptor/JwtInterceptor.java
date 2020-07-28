@@ -53,7 +53,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         String uri = request.getRequestURI();
 
         // 不拦截登录请求
-        if (! uri.contains(LOGIN_URL) || ! uri.contains(FILE_URL) || ! uri.contains(REGISTER_URL) || ! uri.contains(ACTUATOR_URL)) {
+        if (!uri.contains(LOGIN_URL) || !uri.contains(FILE_URL) || !uri.contains(REGISTER_URL) || !uri.contains(ACTUATOR_URL)) {
             String jwt = request.getHeader("Authorization");
 
             Map<String, Object> resp = new HashMap<>(6);

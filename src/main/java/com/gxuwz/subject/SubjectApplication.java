@@ -11,6 +11,9 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 
 
+/**
+ * @author 蔡奇峰
+ */
 @EnableEncryptableProperties // 使用配置加密
 @SpringBootApplication
 @MapperScan("com.gxuwz.subject.mapper")

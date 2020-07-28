@@ -1,4 +1,5 @@
 package com.gxuwz.subject.controller;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gxuwz.subject.common.util.R;
 import com.gxuwz.subject.common.annotation.VisitLimit;
@@ -10,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,9 +18,10 @@ import java.util.Map;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  * 团队信息
+ *
  * @author tale
  * @since 2020-03-25
  */
@@ -34,8 +35,14 @@ public class TeamController {
     @Autowired
     private ITeamMemberService memberService;
 
+    /**
+     * 查询团队信息
+     *
+     * @param params
+     * @return
+     */
     @RequestMapping("/list")
-    public R list(@RequestBody Map<String, Object> params){
+    public R list(@RequestBody Map<String, Object> params) {
 //        public R list(@RequestParam(value = "title", required = false) String title, @RequestParam(value = "teacherId", required = false)String teacherId,
 //            @RequestParam("limit")String limit, @RequestParam("page")String page){
         String title = "";
@@ -44,17 +51,17 @@ public class TeamController {
         Integer page = 1;
 
 
-        if (params.containsKey("title")){
-            title = (String)params.get("title");
+        if (params.containsKey("title")) {
+            title = (String) params.get("title");
         }
-        if (params.containsKey("teacherId")){
-            teacherId = (String)params.get("teacherId");
+        if (params.containsKey("teacherId")) {
+            teacherId = (String) params.get("teacherId");
         }
-        if (params.containsKey("limit")){
-            limit = (Integer)params.get("limit");
+        if (params.containsKey("limit")) {
+            limit = (Integer) params.get("limit");
         }
-        if (params.containsKey("page")){
-            page = (Integer)params.get("page");
+        if (params.containsKey("page")) {
+            page = (Integer) params.get("page");
         }
 
         logger.info("team---teacherId--->" + teacherId);
@@ -75,48 +82,55 @@ public class TeamController {
 
     /**
      * 添加团队信息包括成员
+     *
      * @param teamModel
      * @return
      */
     @PostMapping("/add")
     @VisitLimit(limit = 3, rangeTime = 3, expire = 30)
-    public R add(@RequestBody TeamModel teamModel){
+    public R add(@RequestBody TeamModel teamModel) {
         // 生成团队编号
         long currentTimeMillis = System.currentTimeMillis();
         teamModel.setTeamNo(currentTimeMillis + "");
         List<TeamMemberModel> memberList = teamModel.getMemberList();
-        for (TeamMemberModel member:memberList
-             ) {
+        for (TeamMemberModel member : memberList
+        ) {
             member.setTeamNo(currentTimeMillis + "");
         }
         teamModel.setMemberList(memberList);
 
         boolean flag = memberService.saveBatch(memberList);
 
-        if (! flag){
+        if (!flag) {
             return R.error();
         }
         flag = service.save(teamModel);
-        if (flag){
+        if (flag) {
             return R.ok();
-        }else {
+        } else {
             return R.error();
         }
 
     }
 
+    /**
+     * 更新团队
+     *
+     * @param teamModel
+     * @return
+     */
     @PostMapping("/update")
-    public R update(@RequestBody TeamModel teamModel){
+    public R update(@RequestBody TeamModel teamModel) {
         boolean flag = memberService.updateBatchById(teamModel.getMemberList());
 
-        if (! flag){
+        if (!flag) {
             return R.error();
         }
 
         flag = service.updateById(teamModel);
-        if (flag){
+        if (flag) {
             return R.ok();
-        }else {
+        } else {
             return R.error();
         }
 
@@ -124,16 +138,15 @@ public class TeamController {
 
     /**
      * 删删除团队信息包括成员信息
+     *
      * @param teamNos
      * @return
      */
     @PostMapping("/batchRemove")
-    public R batchRemove(@RequestBody String[] teamNos){
-        logger.info("batchRemove--->" + teamNos);
-
+    public R batchRemove(@RequestBody String[] teamNos) {
         boolean flag = service.removeByIds(Arrays.asList(teamNos));
 
-        if (! flag){
+        if (!flag) {
             return R.error();
         }
 
@@ -142,22 +155,22 @@ public class TeamController {
         QueryWrapper<TeamMemberModel> queryWrapper = new QueryWrapper();
 
         List<Integer> memberNos = new ArrayList<>();
-        for (String id: teamNos
-             ) {
+        for (String id : teamNos
+        ) {
             queryWrapper.eq("team_no", id);
 
             List<TeamMemberModel> memberList = memberService.list(queryWrapper);
-            for (TeamMemberModel member: memberList
-                 ) {
+            for (TeamMemberModel member : memberList
+            ) {
                 memberNos.add(member.getMemberNo());
             }
         }
         logger.info("memberNos---->" + memberNos);
 
         flag = memberService.removeByIds(memberNos);
-        if (flag){
+        if (flag) {
             return R.ok();
-        }else {
+        } else {
             return R.error();
         }
 
