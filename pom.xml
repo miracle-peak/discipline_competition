@@ -21,7 +21,7 @@
     </properties>
 
     <dependencies>
-        <!--        去掉tomcat使用undertow-->
+        <!-- 去掉tomcat使用undertow-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

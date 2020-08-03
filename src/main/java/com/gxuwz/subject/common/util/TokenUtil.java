@@ -1,10 +1,16 @@
 package com.gxuwz.subject.common.util;
 
+import com.gxuwz.subject.common.constant.StatusCode;
+import com.gxuwz.subject.model.JwtValidate;
+import com.gxuwz.subject.model.UserModel;
 import com.qiniu.util.Auth;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -67,6 +73,50 @@ public class TokenUtil {
         Auth auth = Auth.create(AK, SK);
 
         return auth.uploadToken(BUCKET);
+    }
+
+    /**
+     * 验证jwt,首次登录则创建,并把存到redis
+     *
+     * @param one 登录的用户
+     * @param token 需要验证的jwt
+     * @param expireTime 过期时间
+     * @return
+     */
+    public boolean valid(UserModel one, String token, Date expireTime){
+        boolean flag = true;
+        // 获取过期时间的时间戳
+        long time = expireTime.getTime();
+        // 不存在这个token
+        if (StringUtils.isEmpty(token)) {
+            // 创建jwt
+            token = JwtUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
+
+            // 把jwt存到redis
+            // 存jwt到redis过期时间6天
+            flag = jedisUtil.setToken(one.getId() + "", token, time);
+        }else{// 存在jwt（token）
+            // 验证jwt
+            JwtValidate validate = JwtUtil.validateJwt(token);
+
+            // 验证不通过
+            if (! validate.isSuccess()){
+                // jwt过期
+                if (validate.getErrCode() == StatusCode.JWT_EXPIRE){
+                    jedisUtil.deleteStr(one.getId() + "");
+                    // 创建jwt
+                    token = JwtUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
+
+                    // 把jwt存到redis
+                    // 存jwt到redis过期时间6天
+                    flag = jedisUtil.setToken(one.getId() + "", token, time);
+                }
+                // TODO 其他错误未处理
+            }
+
+        }
+
+        return flag;
     }
 
 }

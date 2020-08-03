@@ -2,17 +2,17 @@ package com.gxuwz.subject.common.test;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.gxuwz.subject.common.util.MD5Util;
 import com.gxuwz.subject.common.util.TokenUtil;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.junit.Test;
 import org.springframework.util.Base64Utils;
-
 import java.util.ArrayList;
-import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/3/24 22:05
  * @Version V1.0
  **/
@@ -75,6 +75,24 @@ public class MyTest {
 
 
         System.out.println(objects.get(0));
+    }
+
+
+    @Test
+    public void test(){
+        // 使用双冒号::来构造非静态函数引用
+        String content = "Hello JDK8";
+        Function<Integer, String> func = content::substring;
+        String result = func.apply(1);
+        System.out.println(result);
+
+        Map map = new HashMap<>();
+
+        map.put(null, "a");
+        map.put(null, "b");
+
+        System.out.println("map---->" + map.get(null));
+
     }
 
 }

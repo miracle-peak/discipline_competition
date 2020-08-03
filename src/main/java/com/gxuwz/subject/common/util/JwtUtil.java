@@ -45,7 +45,8 @@ public class JwtUtil {
 
         SecretKey key = getSecret();
 
-        String jwt = Jwts.builder().setClaims(info)
+        String jwt = Jwts.builder()
+                .setClaims(info)
                 .setIssuer(userName)
                 .setSubject("tale")
                 .setIssuedAt(new Date())

@@ -29,13 +29,15 @@ import java.util.Date;
  */
 @RestController
 @RequestMapping("/user")
-@CrossOrigin
 public class UserController {
 
     @Autowired
     private IUserService userService;
     @Autowired
     private ITeacherService teacherService;
+
+    @Autowired
+    private TokenUtil tokenUtil;
 
     @Autowired
     private JedisUtil jedistUtil;
@@ -48,6 +50,7 @@ public class UserController {
     @Log
     @VisitLimit(limit = 3, rangeTime = 5, expire = 60)
     public R login(@RequestBody UserModel userModel){
+        // 这个应该是不会被触发
         if (ObjectUtils.isEmpty(userModel)){
             return R.error().message("啥也没有");
         }
@@ -59,7 +62,7 @@ public class UserController {
         }else if (StringUtils.isEmpty(password)){
             return R.error().message("请输入密码");
         }
-
+        // 密码加盐加密
         password = MD5Util.saltEncryption(password);
 
         QueryWrapper wrapper = new QueryWrapper();
@@ -79,39 +82,9 @@ public class UserController {
             calendar.add(Calendar.HOUR, 24 * 6);
             // 过期时间
             Date expireTime = calendar.getTime();
-            // 获取过期时间的时间戳
-            long time = expireTime.getTime();
 
-            // 不存在这个token
-            if (token == null || "".equals(token)) {
-                // 创建jwt
-                token = JwtUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
-
-                // 把jwt存到redis
-                // 存jwt到redis过期时间6天
-                flag = jedistUtil.setToken(one.getId() + "", token, time);
-            }else{// 存在jwt（token）
-
-                // 验证jwt
-                JwtValidate validate = JwtUtil.validateJwt(token);
-
-                // 验证不通过
-                if (! validate.isSuccess()){
-                    // jwt过期
-                    if (validate.getErrCode() == StatusCode.JWT_EXPIRE){
-                        System.out.println("登录--expire-->");
-                        jedistUtil.deleteStr(one.getId() + "");
-                        // 创建jwt
-                        token = JwtUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
-
-                        // 把jwt存到redis
-                        // 存jwt到redis过期时间6天
-                        flag = jedistUtil.setToken(one.getId() + "", token, time);
-                    }
-                    // TODO 其他错误未处理
-                }
-
-            }
+            // 验证jwt
+            flag = tokenUtil.valid(one, token, expireTime);
 
             if (flag){
                 // 如果是教师则返回教师工号
@@ -125,7 +98,7 @@ public class UserController {
 
                 return R.ok().message("登录成功").data("token", token).data("uType", one.getUtype());
             }else {
-                R.error().message("服务连接失败！").setCode(StatusCode.CONNECTION_ERROR);
+                return R.error().message("服务连接失败！").code(StatusCode.CONNECTION_ERROR);
             }
 
         }
@@ -138,21 +111,15 @@ public class UserController {
     @ResponseBody
     @VisitLimit(limit = 3, rangeTime = 8, expire = 60)
     public R addUser(@RequestBody UserModel user){
-        System.out.println("user-->" + user.toString());
         if (StringUtils.isEmpty(user)) {
-
             return R.error().message("请输入注册信息！");
         }
-
         if (! "".equals(user.getPassword()) && user.getPassword() != null) {
-
             user.setPassword(MD5Util.saltEncryption(user.getPassword()));
 
-            System.out.println(user.getPassword() + "==" + user.getUserName());
-
             boolean flag = userService.saveOrUpdate(user);
-
             if (flag) {
+                // 将用户存到rabbitmq,用于发送qq邮箱通知
                 rabbitProducer.send(user);
 
                 return R.ok().message("添加用户成功");
