@@ -1,14 +1,11 @@
 package com.gxuwz.subject.controller;
 
 
-import com.alibaba.fastjson.JSON;
-import com.gxuwz.subject.common.constant.StatusCode;
-import com.gxuwz.subject.common.util.JedisUtil;
+import com.gxuwz.subject.common.util.RedisUtil;
 import com.gxuwz.subject.model.TeacherModel;
 import com.gxuwz.subject.service.ITeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +28,7 @@ public class TeacherController {
     private ITeacherService service;
 
     @Autowired
-    private JedisUtil jedisUtil;
+    private RedisUtil redisUtil;
 
 
     /**

@@ -36,11 +36,12 @@ public class GlobalExceptionHandler {
             ServletRequestBindingException.class, MethodArgumentNotValidException.class, ConstraintViolationException.class})
     public R handleHttpMessageNotReadableException(Exception e) {
         if (e instanceof BindException){
+            log.error("BindException 400---->", ((BindException)e).getAllErrors().get(0).getDefaultMessage());
             return new R(StatusCode.EXCEPTION_400, ((BindException)e).getAllErrors().get(0).getDefaultMessage());
         }
+        log.error("400 -->", e.getMessage());
         return new R(StatusCode.EXCEPTION_400, e.getMessage());
     }
-
     /**
      * 405 - Method Not Allowed
      * 带有@ResponseStatus注解的异常类会被ResponseStatusExceptionResolver 解析

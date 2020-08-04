@@ -78,7 +78,7 @@ public class JwtUtil {
 
             validate.setSuccess(false);
             validate.setErrCode(StatusCode.JWT_EXPIRE);
-            log.error("jwt过期:" + e.getMessage());
+            log.warn("jwt过期:" + e.getMessage());
 
         }catch (Exception e){
             log.error("jwt exec--->" + e.getMessage());

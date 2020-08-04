@@ -37,7 +37,7 @@ public class TokenUtil {
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
-    private JedisUtil jedisUtil;
+    private RedisUtil redisUtil;
 
 
     /**
@@ -48,7 +48,7 @@ public class TokenUtil {
     public String getRedisToken(){
         Boolean hasKey = redisTemplate.hasKey(KEY);
         if (hasKey){
-            String token = jedisUtil.getStr(KEY);
+            String token = redisUtil.getStr(KEY);
 
             return token;
         }else {
@@ -91,10 +91,8 @@ public class TokenUtil {
         if (StringUtils.isEmpty(token)) {
             // 创建jwt
             token = JwtUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
-
-            // 把jwt存到redis
             // 存jwt到redis过期时间6天
-            flag = jedisUtil.setToken(one.getId() + "", token, time);
+            flag = redisUtil.setToken(one.getId() + "", token, time);
         }else{// 存在jwt（token）
             // 验证jwt
             JwtValidate validate = JwtUtil.validateJwt(token);
@@ -103,13 +101,11 @@ public class TokenUtil {
             if (! validate.isSuccess()){
                 // jwt过期
                 if (validate.getErrCode() == StatusCode.JWT_EXPIRE){
-                    jedisUtil.deleteStr(one.getId() + "");
+                    redisUtil.deleteStr(one.getId() + "");
                     // 创建jwt
                     token = JwtUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
-
-                    // 把jwt存到redis
                     // 存jwt到redis过期时间6天
-                    flag = jedisUtil.setToken(one.getId() + "", token, time);
+                    flag = redisUtil.setToken(one.getId() + "", token, time);
                 }
                 // TODO 其他错误未处理
             }

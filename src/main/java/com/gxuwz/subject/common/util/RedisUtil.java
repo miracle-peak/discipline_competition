@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
  * @Version V1.0
  **/
 @Component
-public class JedisUtil {
-    Logger logger = LoggerFactory.getLogger(JedisUtil.class);
+public class RedisUtil {
+    Logger logger = LoggerFactory.getLogger(RedisUtil.class);
 
     @Resource
     private RedisTemplate redisTemplate;

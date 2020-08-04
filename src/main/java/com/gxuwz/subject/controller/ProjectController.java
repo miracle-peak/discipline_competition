@@ -31,8 +31,6 @@ public class ProjectController {
     public R list(@RequestParam("status")String status, @RequestParam("name")String name,
                   @RequestParam("limit")Integer limit, @RequestParam("page")Integer page,
                   @RequestParam("teacherId")String teacherId){
-        System.out.println("status---->" + status + "name--->" + name);
-
         List<ProjectModel> list = service.findByName(name, status, teacherId);
 
         int total = list.size();

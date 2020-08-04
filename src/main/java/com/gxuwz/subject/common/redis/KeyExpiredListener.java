@@ -1,6 +1,6 @@
 package com.gxuwz.subject.common.redis;
 
-import com.gxuwz.subject.common.util.JedisUtil;
+import com.gxuwz.subject.common.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
@@ -17,10 +17,8 @@ import org.springframework.util.StringUtils;
 @Slf4j
 public class KeyExpiredListener extends KeyExpirationEventMessageListener {
 
-//    private static final Logger log = LoggerFactory.getLogger(KeyExpiredListener.class);
-
     @Autowired
-    private JedisUtil jedisUtil;
+    private RedisUtil redisUtil;
 
     /**
      * Creates new {@link MessageListener} for {@code __keyevent@*__:expired} messages.
@@ -54,10 +52,10 @@ public class KeyExpiredListener extends KeyExpirationEventMessageListener {
 
         System.out.println("redis key 过期：" + expireKey);
 
-        log.error("redis key 过期：{}", expireKey);
+        log.warn("redis key 过期：{}", expireKey);
 
         if (! StringUtils.isEmpty(expireKey)){
-            jedisUtil.deleteStr(expireKey);
+            redisUtil.deleteStr(expireKey);
             log.info("删除过期的redis key：{}", expireKey);
         }
 

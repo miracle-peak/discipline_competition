@@ -24,7 +24,7 @@ public class VisitLimitInterceptor implements HandlerInterceptor {
     Logger logger = LoggerFactory.getLogger(VisitLimitInterceptor.class);
 
     @Autowired
-    private JedisUtil jedisUtil;
+    private RedisUtil redisUtil;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -53,7 +53,7 @@ public class VisitLimitInterceptor implements HandlerInterceptor {
 
             // 当前访问次数
             Integer currentVisit = null;
-            String value = jedisUtil.getStr(key);
+            String value = redisUtil.getStr(key);
 
             if (value != null && ! "".equals(value)){
                 currentVisit = Integer.valueOf(value);
@@ -61,14 +61,14 @@ public class VisitLimitInterceptor implements HandlerInterceptor {
 
             if (currentVisit == null){
                 // 第一次请求
-                jedisUtil.setStr(key, "1", rangeTime);
+                redisUtil.setStr(key, "1", rangeTime);
             }else if (currentVisit < limit){
                 // 在指定时间（rangeTime）内请求相同的方法，访问次数+1
                 Integer times = currentVisit + 1;
-                jedisUtil.setStr(key, times.toString(), rangeTime);
+                redisUtil.setStr(key, times.toString(), rangeTime);
             }else {
                 // 超出限制的访问次数，限制访问。即在expireTime内限制访问
-                jedisUtil.setStr(key, currentVisit.toString(), expireTime);
+                redisUtil.setStr(key, currentVisit.toString(), expireTime);
 
                 // 要返回的响应消息
                 String msg = "小盆友！你操作太频繁了！请在" + expireTime + "秒后再访问";

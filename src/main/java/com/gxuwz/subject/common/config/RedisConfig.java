@@ -22,7 +22,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  **/
 @Configuration
 @EnableCaching
-public class RedisConfiguration {
+public class RedisConfig {
 
     @Autowired
     private RedisConnectionFactory redisConnectionFactory;

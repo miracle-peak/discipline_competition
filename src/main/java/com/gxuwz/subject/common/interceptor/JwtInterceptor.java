@@ -46,7 +46,7 @@ public class JwtInterceptor implements HandlerInterceptor {
     private static final String JWT_ID = "id";
 
     @Autowired
-    private JedisUtil jedisUtil;
+    private RedisUtil redisUtil;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -78,7 +78,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
                     String id = claims.get(JWT_ID).toString();
 
-                    String token = jedisUtil.getToken(id);
+                    String token = redisUtil.getToken(id);
 
                     // jwt不一致
                     if (!jwt.equals(token)) {

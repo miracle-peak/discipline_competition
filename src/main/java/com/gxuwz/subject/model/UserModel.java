@@ -7,6 +7,9 @@ import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -30,8 +33,10 @@ public class UserModel implements Serializable {
 
     private String utype;
 
+    @NotBlank(message = "用户名不能为空")
     private String userName;
 
+    @NotBlank(message = "密码不能为空")
     private String password;
 
 //    @Pattern(regexp = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$", message = "邮箱格式不正确")
