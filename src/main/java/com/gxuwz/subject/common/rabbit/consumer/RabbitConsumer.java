@@ -3,11 +3,14 @@ package com.gxuwz.subject.common.rabbit.consumer;
 import com.gxuwz.subject.common.constant.RabbitConstant;
 import com.gxuwz.subject.common.util.MailUtil;
 import com.gxuwz.subject.model.UserModel;
+import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+import java.io.IOException;
 
 /**
  * 消费者
@@ -28,10 +31,17 @@ public class RabbitConsumer {
      * @param userModel
      */
     @RabbitListener(queues = RabbitConstant.QUEUE_MAIL)
-    public void receiver(@Payload UserModel userModel){
+    public void receiver(Channel channel, Message message, @Payload UserModel userModel){
         log.info("开始发送邮件.....");
 
-        mailUtil.sendMail(userModel);
+        try {
+            mailUtil.sendMail(userModel);
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+            log.info("消息消费成功");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

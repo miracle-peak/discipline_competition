@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -103,7 +105,10 @@ public class UserController {
     @ResponseBody
     @VisitLimit(limit = 3, rangeTime = 8, expire = 60)
     public R addUser(@RequestBody UserModel user){
-        // TODO 还需要验证邮箱 用户名 但使用@Validated返回响应不友好
+        // TODO 需要验证邮箱 用户名 但使用@Validated返回响应不友好
+        if (StringUtils.isEmpty(user.getMail())){
+            return R.error().message("请输入邮箱");
+        }
         if (! StringUtils.isEmpty(user.getPassword())) {
             user.setPassword(MD5Util.saltEncryption(user.getPassword()));
 
@@ -112,7 +117,7 @@ public class UserController {
                 // 将用户存到rabbitmq,用于发送qq邮箱通知
                 rabbitProducer.send(user);
 
-                return R.ok().message("注册成功");
+                return R.ok().message("注册成功" + LocalDateTime.now());
             }
         }
 
