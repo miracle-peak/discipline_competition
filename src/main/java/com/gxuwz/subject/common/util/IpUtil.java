@@ -1,5 +1,8 @@
 package com.gxuwz.subject.common.util;
 
+import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -9,11 +12,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/4/3 14:11
  * @Version V1.0
  **/
+@Slf4j
 public class IpUtil {
+
+    // IP归属地查询
+    public static final String IP_URL_TAOBAO = "http://ip.taobao.com/service/getIpInfo.php";
+    public static final String IP_URL = "http://whois.pconline.com.cn/ipJson.jsp?ip=%s&json=true";
 
     /**
      * 获取客户机ip地址
@@ -77,6 +85,31 @@ public class IpUtil {
             default:
                 return false;
         }
+    }
+
+
+    /**
+     * 根据ip获取详细地址
+     */
+    public static String getCityInfo(String ip) {
+        String address = "XX XX";
+        // 内网不查询
+        if (IpUtil.internalIp(ip)) {
+            return "内网IP";
+        }
+
+        String rspStr = HttpUtils.sendGet(IP_URL, "ip=" + ip + "&json=true", "GBK");
+        if (StringUtils.isEmpty(rspStr)) {
+            log.error("获取地理位置异常: {}", ip);
+            return address;
+        }
+
+
+        JSONObject obj = JSONObject.parseObject(rspStr);
+        String region = obj.getString("pro");
+        String city = obj.getString("city");
+        return String.format("%s %s", region, city);
+
     }
 
     /**
@@ -165,6 +198,7 @@ public class IpUtil {
 
     /**
      * 检查IP是否合法
+     *
      * @param ip
      * @return
      */
@@ -174,7 +208,7 @@ public class IpUtil {
         String regex2 = "[1-9]\\d";
         String regex3 = "\\d";
         String regex = "(" + regex0 + ")|(" + regex1 + ")|(" + regex2 + ")|(" + regex3 + ")";
-        regex = "(" + regex + ").(" + regex + ").(" + regex + ").(" + regex  + ")";
+        regex = "(" + regex + ").(" + regex + ").(" + regex + ").(" + regex + ")";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(ip);
         return m.matches();
@@ -210,16 +244,17 @@ public class IpUtil {
 
     /**
      * 把ip转化为整数
+     *
      * @param ip
      * @return
      */
-    public static long translateIP2Int(String ip){
+    public static long translateIP2Int(String ip) {
         String[] intArr = ip.split("\\.");
         int[] ipInt = new int[intArr.length];
-        for (int i = 0; i <intArr.length ; i++) {
+        for (int i = 0; i < intArr.length; i++) {
             ipInt[i] = new Integer(intArr[i]).intValue();
         }
-        return ipInt[0] * 256 * 256 * 256 + + ipInt[1] * 256 * 256 + ipInt[2] * 256 + ipInt[3];
+        return ipInt[0] * 256 * 256 * 256 + +ipInt[1] * 256 * 256 + ipInt[2] * 256 + ipInt[3];
     }
 
 //    public static void main(String[] args) {

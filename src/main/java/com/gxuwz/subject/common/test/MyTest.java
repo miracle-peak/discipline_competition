@@ -95,4 +95,16 @@ public class MyTest {
 
     }
 
+
+    @Test
+    public void testFor(){
+        for (;;){
+            int i = 2;
+            System.out.println("i--->" + i);
+            i++;
+            return;
+        }
+    }
+
+
 }

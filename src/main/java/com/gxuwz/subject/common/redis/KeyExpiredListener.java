@@ -50,8 +50,6 @@ public class KeyExpiredListener extends KeyExpirationEventMessageListener {
 
         String expireKey = message.toString();
 
-        System.out.println("redis key 过期：" + expireKey);
-
         log.warn("redis key 过期：{}", expireKey);
 
         if (! StringUtils.isEmpty(expireKey)){
