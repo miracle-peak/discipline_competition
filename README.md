@@ -40,7 +40,7 @@
 
 
 1.后台：springboot + mybatis + redis + RabbitMq + jwt + mysql
-2. [前端](https://gitee.com/tale_14/subject_vue)：vue + axios + element-ui
+2. [前端](https://gitee.com/miracle-peak/subject_vue)：vue + axios + element-ui
 
 
 
