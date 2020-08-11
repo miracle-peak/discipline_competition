@@ -87,13 +87,14 @@ public class TokenUtil {
         boolean flag = true;
         // 获取过期时间的时间戳
         long time = expireTime.getTime();
-        // 不存在这个token
+        // 不存在这个token 即第一次登录或者过期删除
         if (StringUtils.isEmpty(token)) {
             // 创建jwt
             token = JwtUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
             // 存jwt到redis过期时间6天
             flag = redisUtil.setToken(one.getId() + "", token, time);
-        }else{// 存在jwt（token）
+        }
+        /*else{// 存在jwt（token）
             // 验证jwt
             JwtValidate validate = JwtUtil.validateJwt(token);
 
@@ -110,7 +111,7 @@ public class TokenUtil {
                 // TODO 其他错误未处理
             }
 
-        }
+        }*/
 
         return flag;
     }

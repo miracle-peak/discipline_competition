@@ -49,11 +49,12 @@ public class JwtInterceptor implements HandlerInterceptor {
     private RedisUtil redisUtil;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String uri = request.getRequestURI();
 
         // 不拦截登录,注册
-        if (!uri.contains(LOGIN_URL) && !uri.contains(FILE_URL) && ! uri.contains(REGISTER_URL) && !uri.contains(ACTUATOR_URL)) {
+        if (!uri.contains(LOGIN_URL) && !uri.contains(FILE_URL) && ! uri.contains(REGISTER_URL)
+                && !uri.contains(ACTUATOR_URL)) {
             String jwt = request.getHeader("Authorization");
 
             Map<String, Object> resp = new HashMap<>(6);
@@ -75,13 +76,11 @@ public class JwtInterceptor implements HandlerInterceptor {
                 Claims claims = validate.getClaims();
 
                 if (claims.containsKey(JWT_ID)) {
-
                     String id = claims.get(JWT_ID).toString();
-
+                    // 获取redis中jwt
                     String token = redisUtil.getToken(id);
-
                     // jwt不一致
-                    if (!jwt.equals(token)) {
+                    if (! jwt.equals(token)) {
                         resp.put("message", "对不起！您的token 有误！token error");
                         resp.put("code", StatusCode.TOKEN_ERROR);
 
@@ -89,7 +88,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
                         return false;
                     }
-                    // 可能是伪造的jwt
+                    // 没有id, 可能是伪造的jwt
                 } else {
                     log.error("可能存在伪造token，无 id key");
                     resp.put("message", "对不起！您的token 有误！token error");

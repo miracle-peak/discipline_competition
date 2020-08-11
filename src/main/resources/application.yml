@@ -5,12 +5,12 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/competition_subject?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
-#    url: jdbc:mysql://127.0.0.1:3306/competition_subject?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&tinyInt1isBit=false
+    url: jdbc:mysql://miraclepeak.xyz:3389/competition_subject?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&tinyInt1isBit=false
     username: ENC(GNTGqKTs2Iu5LCeKJMXiYQ==)
     password: ENC(BS8Z50ImQg3pd0yYonKB5Q==)
 #    password: ENC(APtQIanTvhhFZ45wafbNnw==)
     driver-class-name: com.mysql.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
 
   # 静态文件
   resources:
@@ -19,13 +19,18 @@ spring:
   mvc:
     static-path-pattern: /**
 
+  # json格式化
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
 
   # redis配置
   redis:
     port: 6379
     password: ENC(qQP6p0t7OegwIl5Ue1mkVg==)
     database: 1
-    host: 127.0.0.1
+    host: 172.17.0.1
     # 连接超时时间
     timeout: 5s
     lettuce:
@@ -38,7 +43,8 @@ spring:
         max-active: 8
         # #连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: -1ms
-    # jedis 不好用
+
+    # jedis 太low了
 #    jedis:
 #      pool:
 #        max-active: 8 # 连接池最大连接数（使用负值表示没有限制）
@@ -49,15 +55,15 @@ spring:
 
   # rabbitmq
   rabbitmq:
-    host: 127.0.0.1
+    host: 47.52.72.145
     username: ENC(EUvYvdnpOx8+AIk+rtSkmQ==)
     password: ENC(S4b7L5iuF0T+n5WwLh2+Tg==)
-    port: 5672
+    port: 5670
     virtual-host: ENC(EUvYvdnpOx8+AIk+rtSkmQ==)
     connection-timeout: 60000ms
     # 支持发布确认（开启confirms模式，保证消息可靠性）
     publisher-confirms: true
-    # 支持发布返回
+    # 回调
     publisher-returns: true
     # 开启ACK
     listener:
@@ -75,12 +81,11 @@ spring:
   mail:
     host: smtp.qq.com # 发送邮件服务器
     username: 1748672727@qq.com # 发送邮件的邮箱地址
-    password: ENC(bJc+7aozRKxh) #客户端授权码，不是邮箱密码，这个在qq邮箱设置里面自动生成的
+    password: ENC(bJc+7aozRKxhZplatBFOColD3ZIH5SgBfjM0cAXEOSs=) #客户端授权码，不是邮箱密码，这个在qq邮箱设置里面自动生成的
     #    properties.mail.smtp.port: 465 #端口号465或587
     from: 1748672727@qq.com # 发送邮件的地址，和上面username一致
     default-encoding: utf-8
     protocol: smtp
-
 
 #  tomcat:
 #    uri-encoding: UTF-8
@@ -132,12 +137,21 @@ jasypt:
 
 
 # 监控服务 不指定context则默认/actuator
+#management:
+#  server:
+#    port: 1688
+#  endpoint:
+#    shutdown:
+#      enabled: true
+
 management:
-  server:
-    port: 1688
-  endpoint:
-    shutdown:
-      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: 'prometheus'
+  metrics:
+    tags:
+      application: 'miracle-prometheus'
 
  # 监控信息
 info:
@@ -145,5 +159,10 @@ info:
     name: tale_监控
     url: 博客地址：https://www.jianshu.com/u/7f093d6ed255
     email: ihopyou@qq.com
+# 日志
+logging:
+  level:
+    com.gxuwz.tale: info
+
 
 

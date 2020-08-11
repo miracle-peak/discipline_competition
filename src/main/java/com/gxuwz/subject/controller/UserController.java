@@ -71,29 +71,33 @@ public class UserController {
 
         if (! ObjectUtils.isEmpty(one)){
             String token  = redisUtil.getStr(one.getId() + "");
-            // 保证redis和jwt设置过期时间相同
-            Calendar calendar = Calendar.getInstance();
-            // 设置过期时间
-            calendar.add(Calendar.HOUR, 24 * 6);
-            // 过期时间
-            Date expireTime = calendar.getTime();
 
-            // 验证jwt
-            boolean flag = tokenUtil.valid(one, token, expireTime);
-            if (flag){
-                // 如果是教师则返回教师工号
-                if ("3".equals(one.getUtype())){
-                    QueryWrapper queryWrapper = new QueryWrapper();
-                    queryWrapper.eq("account_num", one.getUserName());
-                    TeacherModel teacherModel = teacherService.getOne(queryWrapper);
-
-                    return R.ok().data("token", token).data("uType", one.getUtype()).data("teacherId", teacherModel.getTeacherId());
-                }
-
-                return R.ok().message("登录成功").data("token", token).data("uType", one.getUtype());
-            }else {
-                return R.error().message("服务连接失败！请稍后重新尝试").code(StatusCode.CONNECTION_ERROR);
+            // 不存在这个token 即第一次登录或者过期删除
+            if (StringUtils.isEmpty(token)) {
+                // 保证redis和jwt设置过期时间相同
+                Calendar calendar = Calendar.getInstance();
+                // 设置过期时间
+                calendar.add(Calendar.HOUR, 24 * 6);
+                // 过期时间
+                Date expireTime = calendar.getTime();
+                // 获取过期时间的时间戳
+                long time = expireTime.getTime();
+                // 创建jwt
+                token = JwtUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
+                // 存jwt到redis过期时间6天
+                redisUtil.setToken(one.getId() + "", token, time);
             }
+            // 如果是教师则返回教师工号
+            if ("3".equals(one.getUtype())){
+                QueryWrapper queryWrapper = new QueryWrapper();
+                queryWrapper.eq("account_num", one.getUserName());
+                TeacherModel teacherModel = teacherService.getOne(queryWrapper);
+
+                return R.ok().data("token", token).data("uType", one.getUtype()).data("teacherId", teacherModel.getTeacherId());
+            }
+
+            return R.ok().message("登录成功").data("token", token).data("uType", one.getUtype());
+
 
         }
         return R.error().message("用户名或密码错误");
