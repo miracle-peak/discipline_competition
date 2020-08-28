@@ -80,8 +80,9 @@ public class UserController {
                 calendar.add(Calendar.HOUR, 24 * 6);
                 // 过期时间
                 Date expireTime = calendar.getTime();
-                // 获取过期时间的时间戳
-                long time = expireTime.getTime();
+                // 获取过期时间的时间戳, 使用同一个 expireTime 保证 jwt 和 redis key过期时间一致
+                // TODO 这个是错的 long time = expireTime.getTime();
+                long time = expireTime.getTime() - System.currentTimeMillis();
                 // 创建jwt
                 token = JwtUtil.createToken(one.getId() + "", one.getUserName(), one.getUtype(), expireTime);
                 // 存jwt到redis过期时间6天
