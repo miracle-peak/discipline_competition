@@ -10,7 +10,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 /**
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/3/27 19:44
  * @Version V1.0
  **/

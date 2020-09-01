@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import lombok.Data;
 
 /**
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/4/24 16:09
  **/
 @Data

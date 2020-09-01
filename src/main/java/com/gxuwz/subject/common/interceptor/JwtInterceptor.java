@@ -53,7 +53,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         String uri = request.getRequestURI();
 
         // 不拦截登录,注册
-        if (!uri.contains(LOGIN_URL) && !uri.contains(FILE_URL) && ! uri.contains(REGISTER_URL)
+        if (!uri.contains(LOGIN_URL) && !uri.contains(FILE_URL) && !uri.contains(REGISTER_URL)
                 && !uri.contains(ACTUATOR_URL)) {
             String jwt = request.getHeader("Authorization");
 
@@ -80,7 +80,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                     // 获取redis中jwt
                     String token = redisUtil.getToken(id);
                     // jwt不一致
-                    if (! jwt.equals(token)) {
+                    if (!jwt.equals(token)) {
                         resp.put("message", "对不起！您的token 有误！token error");
                         resp.put("code", StatusCode.TOKEN_ERROR);
 

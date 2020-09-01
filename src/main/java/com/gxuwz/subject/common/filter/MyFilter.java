@@ -8,17 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * author: 蔡奇峰
+ * @author: 蔡奇峰
  * date: 2020/3/25 13:25
  * @Version V1.0
  **/
 @Component
 public class MyFilter implements Filter {
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
-    }
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         // 预检请求处理
@@ -42,8 +37,4 @@ public class MyFilter implements Filter {
 
     }
 
-    @Override
-    public void destroy() {
-
-    }
 }
