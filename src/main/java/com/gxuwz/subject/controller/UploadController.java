@@ -31,8 +31,8 @@ public class UploadController {
      * 上传文件放在static下需要重新启动系统才可以访问到资源，
      * 因为静态资源打包后放在jar中。
      * TODO 文件放在static的方法只适用于本地，部署到服务器则失效。
-     * TODO 因为打包后jar/war包获取到项目的路径是虚拟的。
-     * TODO 而且也不可能将文件下到jar/war包中。
+     * TODO 因为打包后jar包获取到项目的路径是虚拟的。
+     * TODO 而且也不可能将文件下到jar包中。
      *
      * 解决方法：
      * 1.配置虚拟文件路径的映射
@@ -132,7 +132,8 @@ public class UploadController {
     /**
      * 下载文件
      * 这种下载文件在项目目录的方式只能在本地使用，不能在线上部署使用。
-     * 因为采用jar包/war包部署时，是不能把文件下载进war包/jar包内
+     * 因为springboot打包生成的是jar包，采用jar包部署时，
+     * 是不会像war包那样解压生成文件目录，因此是不能把文件下载进jar包内
      *
      * @param
      * @return
